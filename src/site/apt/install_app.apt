@@ -1,0 +1,22 @@
+
+Start the Example Application
+~~~~~~~~~~~~~~
+
+ Now it's time to start the Sample Application.  
+
+ Open a web browser and enter the following url:
+
++----------------------------------+ 
+ http://localhost:8080/imixs-script
++----------------------------------+ 
+
+ (Change localhost with your host depending on where your server runs if it is not local)
+
+ To log on take one of the user accounts you created before in the imixsrealm - e.g. "Manfred" 
+ 
+ Congratulations! You have successfully installed the Imixs Workflow Engine!
+ 
+ Now you can create and process workitems. And also you can develop your own Imixs Workflow Script app!
+ 
+[images/screen-001.png] 
+ 

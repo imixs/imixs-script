@@ -1,0 +1,194 @@
+
+Examples
+~~~~~~~~~~~~~~~~~~~~
+ 
+ In the following section we will give some examples how <<Imixs Workflow Script!>> can be used in a
+ HTML application. Please note that you need to deploy an Instance of Imixs Workflow on your application server
+ to run this examples. You can download the {{{http://java.net/projects/imixs-workflow/downloads/directory/Imixs%20Script}Imixs Script Sample application}}
+ which provides an example war file taht can be deployed into a GlassFish application server. 
+ {{{./install.html}Read details about the deployment here}}.
+ 
+ 
+ 
+ 
+ 
+* Including Imixs Workflow Script! int a HTML page
+~~~~~~~~~~~~~~~~~~~~
+ To use <<Imixs Workflow Script!>> in a HMTL page you need to load the Imixs Script and jQuery script libraies.
+ This is typically done in the HTML head section of your html page:
+ 
++-------------------------------------------------------------+ 
+ <head>
+...
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/imixs-0.0.1.js"></script>
+</head>
+....
++-------------------------------------------------------------+ 
+ You can also load additional scripts like jQuery-ui which is providing widgets and UI controls working with jQuery.
+  
+ 
+
+
+ 
+* The Workitem Form and View section
+~~~~~~~~~~~~~~~~~~~~
+
+  <<Imixs Workflow Script!>> seachres for predefined sections in your html page to fill in views and 
+  details of a workitem. These sections are named 'workitem_view' and 'worklist_view'.
+  So the minimal structure would look like this:
+  
++-------------------------------------------------------------+ 
+<body>
+  <div id="workitem_view">
+   ......
+  </div>
+  <ul id="worklist_view" />
+</body>
++-------------------------------------------------------------+ 
+  
+  Inside the 'workitem_view'  you can place any kind of input field and additional markup. 
+  <<Imixs Workflow Script!>> will automatically update this part of your page with data provided
+  by the selected workitem.
+  The workitems will be shown in the 'ul' section of your page.
+ 
+ 
+* The Action bar
+~~~~~~~~~~~~~~~~~~~~ 
+ Inside the 'workitem_view' there is another predefined section named 'workitem_activities'. This 
+ section is used for form-actions provided through the workflow model. Depending on the model, 
+ different actions can be added by <<Imixs Workflow Script!>>.
+ 
++-------------------------------------------------------------+ 
+<form>
+.....
+  <!-- Workflow Actions -->
+  <div id="workitem_activities">
+ 	
+   </div>
+</form>
++-------------------------------------------------------------+ 
+ 
+ Inside the 'workitem_activities' section you can place additional 
+ command buttons to add business logic.
+ 
+
+* Setup the Imixs Workflow Script!
+~~~~~~~~~~~~~~~~~~~~
+ 
+ To setup <<Imixs Workflow Script!>> you can use the jQuery onload event. With the 
+ method 'setupWorkflowService' you tell <<Imixs Workflow Script!>> where to find 
+ the RESTful Service and which model and ProcessID should be used per default to start a new Task.
+ 
++-------------------------------------------------------------+ 
+ <head>
+ ....
+ <script type="text/javascript">
+	$(function() {
+		// setup WorkflowService 
+		setupWorkflowService('/imixs-script/rest/', '1.0.0', 10);
+		
+		// clear cache
+		clearWorkitem();
+		clearWorkflowElement('workflow/worklistbyowner/null.json?type=workitem');
+		
+		// fetch default worklist...
+		loadWorkitems('workflow/worklistbyowner/null.json?type=workitem');
+		// additional definitions.....
+	});
+</script>
+
+</head>
+ ......
++-------------------------------------------------------------+ 
+
+ In this example the Imixs REST service is deployed together with the html page at the 
+ URI location '/imixs-script/rest/'. 
+ The process Model which is be used by <<Imixs Workflow Script!>> is '1.0.0' and 
+ the ProcessID a new Task will be started is '10'. The Version of the process model and
+ the ProcessID can be managed with the Imxis Modeler Plugin. 
+ {{{./install_model.html}See 'setup a Workflow Model'}}
+ 
+** Clear local cache
+~~~~~~~~~~~~~~~~~~~~
+ 
+ When the page is loaded or after a workitem was processed you need to clear the local cache to 
+ update you form and views. In the example above this is done by the call :
+ 
++-------------------------------------------------------------+ 
+	clearWorkitem();
+	clearWorkflowElement('workflow/worklistbyowner/null.json?type=workitem');
++-------------------------------------------------------------+ 
+
+ The first method clears the form and updates the initial activities. The second method 
+ clears the local cache for the view 'workflow/worklistbyowner/null.json?type=workitem'.
+ Clearing the local cache is important as <<Imixs Workflow Script!>> caches all the data receifed 
+ from the REST Service in an internal cache. When a workitem was updated or a page was reloaded you 
+ typically clear the cache.
+ 
+** Load worklist
+~~~~~~~~~~~~~~~~~~~~
+
+ Finally the example code above loads the view 'worklistbyowner':
+ 
++-------------------------------------------------------------+ 
+	loadWorkitems('workflow/worklistbyowner/null.json?type=workitem');
++-------------------------------------------------------------+ 
+ 
+ The result of the view is automatically displayed in the div section 'worklist_view'
+ 
+ 
+
+
+* How to start a new Workflow
+~~~~~~~~~~~~~~~~~~~~
+ 
+ As in the example before a new workflow can be started easily by calling the clearWorkitem() 
+ method. This method initalizes a new empty workitem with the default workflow model as defined
+ by the method call 'setupWorkflowService()'.
+ 
+ It is also possible to setup a new workitem with default values from a JavaScript method. 
+ See the following example:
+ 
++-------------------------------------------------------------+ 
+function startNewCustomWorkflow() {
+	// init new custom workitem with default values
+	var newWorkitem = {
+			"item" : [ {
+				"name" : "$processid",
+				"value" : {
+					"@type" : "xs:int",
+					"$" : '400'
+				}
+			}, {
+				"name" : "$modelversion",
+				"value" : {
+					"@type" : "xs:string",
+					"$" : 'mymodel-1.0.0'
+				}
+			}, {
+				"name" : "type",
+				"value" : {
+					"@type" : "xs:string",
+					"$" : 'workitem'
+				}
+			}, {
+				"name" : "_subject",
+				"value" : {
+					"@type" : "xs:string",
+					"$" : "Some default subject...."
+				}
+			} ]
+		};
+
+	// Update the form section with the data from the new created workitem.....
+	updateForm(newWorkitem, '#my-custom-form');
+}
++-------------------------------------------------------------+ 
+ 
+ <<Imixs Workflow Script!>> will automatically load the workflow activities defined in the 
+ workflow model version 'mymodel-1.0.0' with the processID '400'.  
+
+
+
+

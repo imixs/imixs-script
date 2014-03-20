@@ -1,0 +1,76 @@
+
+Building business Apps with HTML and JavaScript!
+~~~~~~~~~~~~~~
+ <<The Imixs Workflow Script! is the first platform that enables you to build 
+  business apps only with HTML and JavaScript!>>
+ 
+ 'Imixs Workflow Script!' provides a JavaScipt workflow library 
+ for browser based workflow applications. 
+ 'Imixs Workflow Script!' combines the benefits of jQuery with the 
+ capabilities of the Imixs Workflow engine. With the help of 
+ 'Imixs Workflow Script!' any web application can extended easily 
+ with workflow functionality.
+  
+  
+* Get started....
+~~~~~~~~~~~~~~~~~~~~
+ <<Imixs Workflow Script!>> is based on {{{http://jquery.org/}jQuery}} and interacts
+ with the Imixs Workflow engine through a RESTful service api.
+ To use this framework, you simply add the imixs.js and jQuery libraries into your html page....
+ 
++------------------------------------------+ 
+<head>
+...
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/imixs-0.0.1.js"></script>
+</head>
+....
++------------------------------------------+ 
+
+ ...with predefined sections, <<Imixs Workflow Script!>> detects automatically forms and view areas....
+ 
++------------------------------------------+ 
+ <div id="workitem_view">
+	<form action="rest/workflow/workitem?action=../index.html" method="post">
+		Subject: <input type="text" name="_subject" /> 
+		<!-- Workflow Actions -->
+		<div id="workitem_activities">
+			<input type="button" value="Cancel" onclick="clearWorkitem();" />
+		</div>
+	</form>
+	.....
+  </div>
+  .......
+  <div id="sidebar">
+    <ul id="worklist_view" />
+  </div>
++------------------------------------------+ 
+
+ ...and adds action buttons automatically into your form - depending on the process instance and
+ workflow model.
+ 
+[images/screen-001.png] 
+
+ <<Imixs Workflow Script!>> interacts with the Imixs Workflow engine through a RESTful web service.
+ This service runs in the background and provides information about the 
+ process model and stores form data into a database. 
+ 
+ 
+* Download Imixs Workflow Script!
+~~~~~~~~~~~~~~~~~~~~
+ You can download the latest version of <<Imixs Workflow Script!>>
+ from the {{{http://java.net/projects/imixs-workflow/downloads/directory/Imixs%20Script}Imixs Donwload page}}.
+ Please note that you also need to download jQuery from the {{{http://jquery.org/}jQuery Download page}}
+ 
+* The Sample application
+~~~~~~~~~~~~~~~~~~~~
+ To see a full example application just download the {{{http://java.net/projects/imixs-workflow/downloads/directory/Imixs%20Script}Imixs Script Sample application}}.
+ This example provides a war file which can be deployed into 
+ any Java EE application server. {{{./install.html}Read details here}}
+ 
+ 
+    [Note:] Imixs Workflow Script! is based on the Imixs Workflow Project. 
+    If you just want to build you business app with Imixs Script! 
+    there is no need to go into the details of the Imixs Workflow API and Imixs Workflow Engine.
+    You can checkout the sources from the sample app and start your project.	
+ 

@@ -1,0 +1,45 @@
+
+Installation
+~~~~~~~~~~~~~~
+
+ The following section will give you a brief overview how to install the Imixs Worklfow Script! sample
+ application. Please be aware that the Imixs Workflow engine needs to be deployed on a Java EE 
+ Application Server before you can use Imixs Workflow Script!.
+ 
+ You can download the Imixs Workflow Script! sample
+ application from the {{{http://java.net/projects/imixs-workflow/downloads/directory/Imixs%20Script}Imixs Donwload page}}
+ 
+
+* Install and setup your Application Server 
+~~~~~~~~~~~~~~
+
+ To install the Imixs Workflow Engine you need first a Java EE application server like 
+ {{{http://www.glassfish.org/}Glassfish}} (Oracle), {{{http://geronimo.apache.org}Geronimo}} (IBM) or 
+ {{{http://www.jboss.org/jbossas}JBoss}}. 
+ To deploy the Imixs Workflow Engine and the Imixs Workflow Script! aample application 
+ at least the following resources are necessary:
+ 
+  	* a Database to store workitems processed by the Imixs Workflow engine
+  	
+  	* a JPA based Database connection from your Application Server to your database
+  	
+  	* a Security Realm to authenticate users who should interact with the Imixs Workflow Management System
+  	
+  	
+ After you have set up your server environment you can develop your own application by only using
+ HTML and JavaScript.
+ 
+ The next sections will explain the configuration steps needed to successfully deploy the
+ Imixs Sample Application on different Java EE Servers: 
+ 
+ 
+    * {{{./install_glassfish.html}Install the Sample Application on GlassFish}}
+    
+    * {{{./install_model.html}Setup a Workflow Model}}
+    
+    * {{{./install_app.html}Run the application}}
+  
+
+ [Note:] In the Section {{{http://www.imixs.org/jee/}Imixs Workflow Engine}} you will find further information
+    how to install and setup the Imixs Workflow on different application server environments. 
+  

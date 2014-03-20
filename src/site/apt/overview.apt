@@ -1,0 +1,70 @@
+
+Overview
+~~~~~~~~~~~~~~
+
+ <<Imixs Workflow Script!>> is a JavaScript library based on {{{http://jquery.org/}jQuery}}.
+ The library provides methods to interact with the Imixs Workflow engine through a 
+ Imixs RESTful Service API.
+ 
+[images/architecture.png] 
+ 
+ The Imixs Workflow engine is a backend service providing a full features workflow management system (WFMS).
+ The Imixs Workflow engine interacts with optional backend systems. For example to store process data into 
+ a SQL database or authenticates users by using a LDAP directory.  
+ 
+ The Imixs Workflow Engine is based on the Java Enterprise Edition (JEE) and fulfills the requirements to a 
+ scalable, transactional, robust backend service. The Imixs Workflow engine can be deployed
+ on any Java EE6 compliant server. To learn more about the Imixs Workflow see the section {{{http://www.imixs.org/jee/}Imixs Workflow engine}}.
+ 
+    [Note:] You can use Imixs Workflow Script! with any instance of a Imixs Workflow backend service.
+    So Imixs Workflow Script can be used to extend exiting business applications or provide
+    additional functionality to any web application.  
+ 
+ 
+ 
+* The RESTful Service API
+~~~~~~~~~~~~~~~~~~~~ 
+ REST is an architectural style that can be used to guide the construction of web services in a 
+ more easy kind as a service which uses the SOAP specification. 
+ Imixs Workflow provide a REST Service Implementation to interact with the Imixs Workflow engine.
+
+ Through unique resource identifiers the Imixs REST service provides different resources to 
+ request or send data from/to the workflow engine.
+
+ The main ressource /workflow is uses to read and store Workitems and Workitem collections. 
+ For example the URI
+ 
++--------------------+ 
+ /workflow/worklist/[userID].json
++--------------------+ 
+
+ provides a takslist for the specified userid in JSON format. If you are running the Imxis Workflow 
+ server on your localhost in a web application called '/imixs-script' the following URI returns a
+ list of all workitems for the user "Eddy":
+ 
++--------------------+ 
+ http://localhost:8080/imixs-script/rest/workflow/worklist/Eddy.json
++--------------------+ 
+  
+ Each workitem returned by this service request contains several attributes including the '$uniqueid'. 
+ The attribute '$uniqueid' identifies a workitem by its internal ID. You can use this ID to request 
+ the data of a specific Workitem from the workflow server:
+ 
++--------------------+ 
+ http://localhost:8080/imixs-script/rest/workflow/workitem/[xxxxxxx-xxxxxxx].json
++--------------------+ 
+ 
+ Also you can post any kind of data back to the Workflow Server. In a HTML application this is
+ typically realized by using the <form> Tag:
+ 
++--------------------+ 
+ <form action="rest/workflow/workitem?action=../index.html" method="post">
+		Subject: <input type="text" name="_subject" /> 
+		<!-- Workflow Actions -->
+		<div id="workitem_activities">
+			<input type="button" value="Cancel" onclick="clearWorkitem();" />
+		</div>
+ </form>
++--------------------+ 
+ 
+ To learn more about the Imixs Workflow REST service API read the section {{{http://www.imixs.org/xml/restservice.html}Imixs REST Services}}.

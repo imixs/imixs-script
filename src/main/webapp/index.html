@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Imixs Workflow Script!</title>
+<link type="text/css"
+	href="themes/imixs/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
+	
+<link type="text/css" href="css/basic.css" rel="stylesheet" />
+
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
+<script type="text/javascript" src="js/imixs-0.0.3.js"></script>
+<script type="text/javascript">
+	$(function() {
+
+		$("input:submit,input:reset,input:button,button").button();
+
+		// setup WorkflowService 
+		setupWorkflowService('/imixs-script/rest/', '1.0.0', 10);
+
+		// clear workitem_view 
+		clearWorkitem();
+		
+		// reload workitems ....
+		clearWorkflowElement('workflow/worklistbyowner/null.json?type=workitem');
+		clearWorkflowElement('workflow/worklist.json?type=workitem');
+	
+
+		// fetch default worklist...
+		loadWorkitems('workflow/worklistbyowner/null.json?type=workitem');
+
+		
+		$("#workflow_history").hide();
+		$('#workitem_view').bind('afterRefresh',
+				function(e, workitem) {
+					updateWorkflowStatus(e, workitem);
+			}
+		);
+		
+		
+		$("#switch-mytasks")
+		.click(
+				function() {
+					$("#switch-mytasks").addClass(
+							"selected");
+					$("#switch-alltasks").removeClass(
+							"selected");
+					
+					loadWorkitems('workflow/worklistbyowner/null.json?type=workitem');
+				}
+		);
+		
+		
+		$("#switch-alltasks")
+		.click(
+				function() {
+					$("#switch-alltasks").addClass(
+							"selected");
+					$("#switch-mytasks").removeClass(
+							"selected");	
+					loadWorkitems('workflow/worklist.json?type=workitem');
+				}
+		);
+	});
+	
+	
+	
+	
+	/**
+	 * This method fills the #workflow_history
+	 * 
+	 * @param e
+	 * @param workitem
+	 */
+	function updateWorkflowStatus(e, workitem) {
+		
+		// if workitem is new - we did not need to create this section
+		var newcontent = "";
+		var uid = getEntityItemValue(workitem, "$uniqueid");
+		var comments = getEntityItemValueArray(workitem, "txtworkflowhistorylog");
+		
+		if (uid == '' || comments == null || comments.length == 0) {
+			$("#workflow_history").hide();
+			$("#workitem_headline").text('Start a new task:');
+			return;
+		}
+		
+	
+		// update the headline..
+		$("#workitem_headline").text('Edit task: '+getEntityItemValue(workitem, "txtworkflowstatus"));
+		
+		
+		// update hisotry
+	
+		// clear list
+		$("#workflow_history").empty();
+
+		
+		// setup table frame
+		newcontent = "<table>";
+
+		for ( var i = 0; i < comments.length; i++) {
+			if (comments[i].$ != null) {
+				newcontent = newcontent + "<tr><td>" + comments[i].$ + "</td>";
+				newcontent = newcontent + "</tr>";
+			}
+		}
+
+		newcontent = newcontent + "</table>";
+		$("#workflow_history").append(newcontent);
+		
+		
+		$("#workflow_history").show();
+
+	}
+</script>
+
+</head>
+
+
+<body>
+
+
+	<section id="page">
+		<header>
+			<!-- Defining the header section of the page with the appropriate tag -->
+
+			<div id="branding">
+				<div id="branding-box">
+					<span id="brand-text">Imixs Workflow Script!</span> <span
+						id="claim-text">The Imixs workflow network</span>
+					<div style="clear: left;" />
+				</div>
+
+			</div>
+
+			<nav>
+				<!-- The nav link semantically marks your main site navigation -->
+				<ul>
+					<li><a href="http://www.imixs.org" target="_blank">Imixs.org</a></li>
+				</ul>
+			</nav>
+
+		</header>
+
+
+		<div id="main-content">
+			<section id="articles">
+
+				<h2 id="workitem_headline">Start a new task:</h2>
+				
+				<div id="workitem_view">
+					<form action="rest/workflow/workitem?action=../index.html"
+						method="post">
+
+						<dl>
+							<dt>Subject:</dt>
+							<dd>
+								<input type="text" name="_subject" />														
+							</dd>
+							<dd>
+								<textarea name="_comment" style="xwidth: 200px;"></textarea>
+							</dd>
+						</dl>
+
+
+						<!-- Workflow Actions -->
+						<div id="workitem_activities">
+
+							
+
+						</div>
+						
+						<h3>
+							Workflow History:
+						</h3>
+
+						<div id="workflow_history" 
+							class="ui-widget ui-state-highlight ui-corner-all"/>
+
+
+						
+
+						
+					</form>
+
+
+				</div>
+
+
+			</section>
+
+			<div id="dashboard">
+
+				<ul class="nav">
+					<li id="switch-mytasks" class="selected"><a href="#">My Tasks</a></li>
+					<li id="switch-alltasks"><a href="#" >All Workitems</a></li>
+				</ul>
+				<div style="clear: left;" />
+				<div id="sidebar">
+					<ul id="worklist_view" />
+				</div>
+
+			</div>
+		</div>
+
+
+
+		<footer> Copyright © imixs.com, 2012 
+		
+		<a href="#" onclick="javascript:localStorage.clear();">clear cache</a>
+		
+		</footer>
+
+	</section>
+
+</body>
+</html>
+
+
+

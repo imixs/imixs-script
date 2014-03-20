@@ -1,0 +1,95 @@
+
+Creating a Workflow Model
+~~~~~~~~~~~~~~
+
+ One of the great advantages of Workflow Management Systems is that the behavior of an 
+ application can be controlled using a workflow model.
+ Workflow models can be designed with the Imixs Modeler from your Eclipse IDE.
+ 
+[images/modeler-001.png] 
+ 
+ 
+ You can download a sample workflow model from the 
+ {{{http://java.net/projects/imixs-workflow/downloads/directory/Imixs%20Script}Imixs Donwload page}},
+ or create your own model.
+ 
+     [Note:] Read the {{{install.html}Install guide section}} to see how you can install the Imixs Modeller.
+ 
+* Creating a new Model
+~~~~~~~~~~~~~~
+ You can use any kind of Eclipse Project to manage Imixs Workflow Files. If you have not yet created 
+ a Eclipse Project choose
+ 
++---------------------+
+ File > New > Project...
++---------------------+
+
+ and choose the Project type 'General > Project' to create an new empty Eclipse Project.
+
+ To create a new Imixs Model file in your eclipse project choose 
+
++---------------------+
+ File > new > Other
++---------------------+
+
+ Select the Option 'Imixs Workflow -> new Imixs Workflow Model'.
+ Make sure that you have selected a target folder inside your project before where the Model File should be 
+ created in by the assistant.
+ 
+[images/modeler-003.png]
+ 
+ Click the button "Next >" and choose a file-name for the Model File to be created. On the next page you can
+ define the name of your first business process - the Process Name.
+ After you created a new workflow model file you can, in case you haven't done it already, 
+ activate the Imixs Workflow perspective.
+ 
+* Designing a business process
+~~~~~~~~~~~~~~
+ After you have opened the Imixs Model file you can choose the Process Group created before. You can
+ also click on "create new" to create a new empty process group.
+ A Workflow Process Group is a single Business Process contained by a Imixs Workflow Model file. 
+ Each Imixs Workflow Model can exist of many different Process Groups. Each Process Group defines 
+ "Process Entities" and "Process Activities".
+ 
+[images/modeler-002.png] 
+
+ The process group will open in a new Editor. In this graphical editor you can define the behavior of 
+ your process model. From the palette on the right side you can choose the Process and Activity Entities and
+ place them into your model. 
+ 
+[images/modeler-004.png] 
+ 
+ The "Process Entity" defines the current status inside a business process ('open' or 'in progress')
+  and the "Process Activities" are defining the transition from one "Process Entity" into another 
+  "Process Entity". Each "Process Entity" can be assigned to one ore many "Process Activities"
+ 
+ Below the graphical editor you see the property view. 
+ 
+[images/modeler-005.png] 
+ 
+ Within the property view you can define what should happen with a process instance when a user
+ clicks an activity. For example you can define the Read- and Write Access or the Ownership of an 
+ process instance. You can also define Email notifications or the process documentation. 
+ 
+ 
+* Uploading a workflow model
+~~~~~~~~~~~~~~
+ After you have designed your business process you can upload the model into your Imixs Workflow Server.
+ Open the model file to open the Workflow Overview section. 
+ 
+[images/modeler-002.png] 
+  
+ Make sure that you have defined a model version number. This identifier is used by Imixs Workflow engine
+ to assign a process instance to the corresponding model version. 
+ In the field Web Service Location enter the URL from the Imixs RESTservice. In case of the sample application
+ the URI is:
+ 
++----------------------+ 
+ http://localhost:8080/imixs-script/rest/model
++----------------------+ 
+ 
+ You can test the URL also in your web browser to see which models are currently available. 
+
+ Click on 'upload model' to synchronize your new or modified model with the workflow server. 
+ 
+ See also the {{{http://www.imixs.org/modeler/}Imixs Modeler section}} for further information.

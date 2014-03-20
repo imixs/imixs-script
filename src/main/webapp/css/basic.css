@@ -1,0 +1,342 @@
+/*demo page css*/
+* { /* Universal reset: */
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	/* Setting the default text color, size, page background and a font stack: */
+	font: 75.5% "Trebuchet MS", sans-serif;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background-color: #F3F5EB;
+}
+
+header,footer,article,section,hgroup,nav,figure {
+	/* Giving a display value to the HTML5 rendered elements: */
+	display: block;
+}
+
+header {
+	background-color: #FFCC00;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+	margin-bottom: 40px;
+	height: 45px;
+}
+
+/* Hyperlink Styles: */
+a,a:visited {
+	color: #0196e3;
+	text-decoration: none;
+	outline: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a img {
+	border: none;
+}
+
+/* Headings: */
+h1 {
+	text-shadow: 0 1px 1px #CCC;
+	font-size: 2.0em;
+	line-height: 1.5em;
+}
+
+h2 {
+	text-shadow: 0 1px 1px #CCC;
+	font-size: 1.5em;
+	line-height: 1.5em;
+}
+
+h3 {
+	font-size: 1.2em;
+	line-height: 1.5em;
+}
+
+p {
+	line-height: 1.5em;
+	padding-bottom: 1em;
+}
+
+
+
+/*** DL Definitonen ****/
+dl {
+	font-size: 12px;
+	min-width: 365px;
+	margin: 0;
+}
+
+
+dl dt {
+	margin: 0;
+	padding: 5px;
+	font-weight: bold;
+}
+
+dl dd {
+	padding: 5px;
+}
+
+
+input[type="text"],input[type="password"],textarea {
+	border: 1px solid #ddd;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+textarea {
+	width: 98%;
+	height: 30px;
+	padding: 5px;
+}
+
+
+input[type="button"],input[type="submit"],button {
+	margin-right:5px;
+}
+
+
+
+hgroup {
+	width: 960px;
+	margin: 0 auto;
+	position: relative;
+}
+
+#branding {
+	width: 960px;
+	margin: 0 auto;
+	position: relative;
+	display: block;
+	padding-top: 5px;
+}
+
+#branding-box {
+	width: 490px;
+	border-bottom: 1px solid #eee;
+	display: block;
+	position: relative;
+}
+
+#brand-text { 
+	font-family: "Myriad Pro", "Helvetica Neue", Helvetica, Arial,
+		Sans-Serif;
+	text-shadow: 0 1px 1px #EEEEEE;
+	font-weight: bold;
+	font-size: 2.2em;
+	line-height: 1.0em;
+	color: #FFFFFF;
+	float: left;;
+}
+
+#claim-text {
+	font-family: "Myriad Pro", "Helvetica Neue", Helvetica, Arial,
+		Sans-Serif;
+		color: #666666;
+	text-shadow: 0 1px 1px #DDD;
+	font-weight: normal;
+	font-size: 1.2em;
+	padding-left: 20px;
+	padding-top: 10px;
+	float: left;
+}
+
+nav {
+	padding: 0 5px;
+	position: absolute;
+	right: 40px;
+	top: 0px;
+}
+
+/* The clearfix hack to clear the floats: */
+.clear:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+/* The navigation styling: */
+nav ul li {
+	display: inline;
+}
+
+nav ul li a,nav ul li a:visited {
+	color: #666666;
+	display: block;
+	float: left;
+	margin: 5px 2px;
+	padding: 7px 10px 4px;
+}
+
+nav ul li a:hover {
+	text-decoration: none;
+	color: #FFF;
+}
+
+/* Article styles: */
+#page {
+	width: 100%;
+	margin: 0 auto;
+	position: relative;
+	color: #fcfcfc;
+}
+
+#main-content {
+	z-index: 1;
+	overflow: hidden;
+	text-align: left;
+	width: 960px;
+	margin: 0 auto;
+	position: relative;
+	
+	background-color: #fff;
+	padding: 0px;
+	color: #000;
+}
+
+#articles {
+	margin: 0;
+	position: relative;
+	padding: 20px;
+	color: #000;
+	width: 540px;
+	float: left;
+	display: inline-block;
+	z-index: 4;
+	
+
+	background: transparent;
+	height: 100%;
+	min-height: 700px;
+}
+
+#dashboard {
+	background-color: #F7FBFB;
+	max-width: 460px;
+	min-width: 340px;
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+	min-height: 700px;
+	padding: 18px;
+border-left: 2px solid #086FA1;
+}
+
+/* The navigation styling: */
+
+
+#dashboard .nav {
+	border-bottom: 1px solid #999;
+	margin-bottom: 10px;
+	height: 20px;
+}
+
+#dashboard .nav   li {
+	display: inline;
+	
+}
+#dashboard .nav li a {
+	font-weight: bold;
+	background: #999;
+	color: #fff;
+}
+
+
+#dashboard .nav   li.selected a {
+	background: #086FA1;
+}
+
+#dashboard .nav   li a, #dashboard .nav   li a:visited {
+	display: block;
+	float: left;
+	margin: 0 5px 0 0;
+	padding: 5px 10px 2px 10px;
+	border-radius: 4px 4px 0 0;
+	cursor: pointer;
+}
+
+#dashboard .nav   li a:hover {
+	text-decoration: underline;
+	background: #719C00;
+}
+
+
+article {
+	
+}
+
+/* Footer styling: */
+footer {
+	margin-bottom: 30px;
+	text-align: center;
+	font-size: 0.825em;
+	color: #000;
+}
+
+footer p {
+	margin-bottom: -2.5em;
+	position: relative;
+}
+
+
+
+
+
+#worklist_view {
+	
+}
+
+#worklist_view  .workitem {
+	display: list-item;
+	list-style: none;
+	width: 100%;
+	xheight: 60px;
+	border-bottom: 1px solid #ccc;
+	cursor: pointer;
+	padding: 5px 0 10px 0;
+}
+
+#worklist_view  .workitem:HOVER {
+	background-color: #FFF;
+	border-bottom: 1px solid #ddd;
+}
+
+
+
+#worklist_view  .workitem-thumb {
+	float: left;
+	margin-right: 5px;
+}
+
+#worklist_view  .workitem-info {
+	
+}
+
+#worklist_view  .workitem-summary {
+	
+}
+
+
+#worklist_view  .workitem-abstract {
+	xclear: left;
+}
+
+#workitem_worksheet, #workitem_comments,#workitem_worksheet,#workitem_workflow {
+
+}
+
+#workitem_view * h3 {
+	margin-top: 16px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom:10px;
+}
+
+
+
+
+

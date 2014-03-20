@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Imixs JavaScript Workflow Engine">
+   
+	<skin>
+		<groupId>org.imixs.workflow</groupId>
+		<artifactId>imixs-workflow-maven-skin</artifactId>
+		<version>1.0.0</version>
+	</skin>
+  
+ 
+  <body>
+     <links>
+      <item name="Home" href="http://www.imixs.org/" />
+      <item name="Quick Start" href="http://www.imixs.org/api/" />
+      <item name="Workflow Engine" href="http://www.imixs.org/jee/" />
+      <item name="XML &amp; WebServices" href="http://www.imixs.org/xml/" />
+      <item name="Web Tools" href="http://www.imixs.org/jsf/" />
+      <item name="Modelling" href="http://www.imixs.org/modeler/" />
+      <item name="Script!" href="index.html" />
+    </links>
+
+
+
+    <menu name="General">
+      <item name="About" href="index.html"/>
+      <item name="Overview" href="overview.html"/>    
+       <item name="Modelling" href="modelling.html"/>      
+      <item name="Installation" href="install.html" collapse="true">      
+        <item name="Setup Glassfish" href="install_glassfish.html"/>      
+         <item name="Setup Model" href="install_model.html"/>
+        <item name="Run Application" href="install_app.html"/>            
+      </item>         
+      <item name="Examples" href="examples.html"/>    
+      <item name="Worklist" href="worklist.html"/> 
+      <item name="Events" href="events.html"/> 
+     </menu>
+         
+
+ 	<menu name="Project Information">
+      <item name="Project Summary" href="project-summary.html"/>      
+      <item name="Project License" href="license.html"/>      
+      <item name="Project Team" href="team-list.html"/>    
+      <item name="Issue Tracking" href="issue-tracking.html"/>      
+      <item name="Mailing Lists" href="mail-lists.html"/>      
+	</menu> 
+
+
+  </body>
+ 
+</project>

@@ -1,0 +1,82 @@
+
+Events
+~~~~~~~~~~~~~~~~~~~~
+ 
+ Events are used to extend the build-in functionallity from 'Imixs Workflow Script!'.
+ Eents are bound to predefined sections in a html page and triggered through the jQuery event model.
+ 
+ 
+ The following example demonstrate a typical binding of an event:
+ 
++-------------------------------------------------------------+ 
+ <head>
+...
+<script type="text/javascript">
+	$(function() {
+		....
+		$('#workitem_activities').bind('afterRefresh', function(e, workitem) {
+			// add a new button
+			addActionButton("Confirm",20,true);
+		});
+     	......	
+	});
+</script>
+....
++-------------------------------------------------------------+ 
+ 
+
+ 
+* #workitem_view - beforeRefresh 
+~~~~~~~~~~~~~~~~~~~~
+ The event afterRefresh from the #workitem_view section is triggered before a new workitem will be loaded into the #workitem_view section. 
+ The event is useful to evaluate form data before it will be replaced with the data from a new workitem. 
+ For example you may ask the user if he wants to save changes before the view will be refreshed. 
+
+* #workitem_view - afterRefresh 
+~~~~~~~~~~~~~~~~~~~~
+ The afterRefresh event from the section #workitem_view is typical used to modify the form depending on the data of a new workitem.
+ For example you can hide or show input fields depending on the provided data. There for the event 
+ provides a param witht the current workitem data.
+ The following example relaces the value of a head line with the current workflow status.
+ 
++-------------------------------------------------------------+  
+ $('#workitem_view').bind('afterRefreshWorkitem',
+	function(e, workitem) {
+		$("#workitem_headline").text(getEntityItemValue(workitem, "txtworkflowstatus"));
+	});
++-------------------------------------------------------------+ 
+ 
+
+* #workitem_activities - afterRefresh
+~~~~~~~~~~~~~~~~~~~~
+ The afterRefresh event from the section #workitem_activities can be used to add custom command buttons into the 
+ action toolbar. Like the afterRefresh event from the section #workitem_view the event provides the current workitem.
+ 
++-------------------------------------------------------------+  
+ $('#workitem_activities').bind('afterRefresh', function(e, workitem) {
+	// add a new button
+	addActionButton("Confirm",20,true);
+ });
++-------------------------------------------------------------+  
+
+
+
+
+* #workitem_view - beforeProcess
+~~~~~~~~~~~~~~~~~~~~
+ The beforeProcess event from the section #workitem_view can be used to add custom business logic 
+ before the form data is processed by the Imixs Workflow Engine.
+ Like the afterRefresh and beforeRefresh event from the section #workitem_view this event provides 
+ the current workitem.
+ 
++-------------------------------------------------------------+  
+	 $('#workitem_view').bind('beforeProcess', function(e, workitem) {
+         // validate input    
+         ....
+   	 });
++-------------------------------------------------------------+  
+ 
+* #worklist_view - refreshWorklist
+~~~~~~~~~~~~~~~~~~~~ 
+ The event 'refreshWorklist' can be used to customize the output of a worklist. 
+ See {{{./worklist.html}section worklist}} for more details.
