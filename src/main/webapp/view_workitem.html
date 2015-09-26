@@ -1,0 +1,60 @@
+<div class="row">
+
+
+	<div data-ben-controller="workitemController">
+
+		<h1>Workitem:</h1>
+
+
+		<div class="imixs-form-section">
+			<input type="button" value="Close" onclick="adminclient.queryRoute.route()"
+				class="btn" />
+		</div>
+
+
+		<!-- Error message -->
+		<div id="imixs-error" style="">
+			<div class="ui-state-error ui-corner-all">
+				<p>
+					<span class="ui-icon ui-icon-alert"
+						style="float: left; margin-right: .3em;"></span> <strong>Error:</strong>
+				</p>
+				<p id="error-message" />
+			</div>
+		</div>
+
+
+		<table>
+			<thead>
+				<tr>
+					<th></th>
+					<th>Field</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+			<tbody data-ben-foreach="getSortedItemlist()">
+				<tr>
+
+					<td><span data-ben-model="indexIcon"/></td>
+
+					<td><span style="font-weight: bold;" data-ben-model="name"></span></td>
+					<td><span data-ben-foreach="value"> <!-- here we need a data-ben-rendered feature to avoid emtpy entries -->
+							<span style="font-weight: bold;"
+							data-ben-model="model['xsi:type']"></span> : <span
+							data-ben-model="model['$']"></span><br />
+					</span></td>
+				</tr>
+			</tbody>
+		</table>
+
+
+	</div>
+
+	<div class="imixs-form-section">
+		<input type="button" value="Close" onclick="adminclient.queryRoute.route()"
+				class="btn" />
+	</div>
+
+</div>
+
+

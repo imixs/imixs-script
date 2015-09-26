@@ -5,7 +5,7 @@
 	<artifactId>imixs-script</artifactId>
 	<version>2.0.0</version>
 	<packaging>war</packaging>
-	<name>Script!</name>
+	<name>Imixs-Script</name>
 	<description>Sample Applictaion</description>
 
 
@@ -77,10 +77,12 @@
 		</license>
 	</licenses>
 
-
+	
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<relativizeDecorationLinks>false</relativizeDecorationLinks>
+		<org.imixs.workflow.version>3.4.0-SNAPSHOT</org.imixs.workflow.version>
+		<custom.webResources>src/main/webapp</custom.webResources>
 		<org.imixs.workflow.version>3.4.0-SNAPSHOT</org.imixs.workflow.version>
 	</properties>
 
@@ -119,7 +121,20 @@
 				</configuration>
 			</plugin>
 
-
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<directory>${custom.webResources}</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -152,15 +167,12 @@
 			</plugin>
 
 
-			<!-- relase management -->
+			<!-- release management -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<tagBase>https://svn.java.net/svn/imixs-workflow~svn/imixs-workflow-script/tags</tagBase>
-					<mavenExecutorId>forked-path</mavenExecutorId>
-				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

@@ -1,0 +1,58 @@
+<div class="row imixs-view">
+
+	
+
+
+
+	<h1>Worklist:</h1>
+	<div data-ben-controller="worklistController">
+
+		
+
+		<!-- Error message -->
+		<div id="imixs-error" style="">
+			<div class="ui-state-error ui-corner-all">
+				<p>
+					<span class="ui-icon ui-icon-alert"
+						style="float: left; margin-right: .3em;"></span> <strong>Error:</strong>
+				</p>
+				<p id="error-message" />
+			</div>
+		</div>
+
+
+		<!--  Result list -->
+
+		<div>
+			<table>
+				<thead>
+					<tr>
+						<th>Summary</th>
+						<th>Modified</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody data-ben-foreach="view as adminclient.Workitem">
+					<tr>
+						<td><a href="javascript:;"
+							onclick="adminclient.workitemController.loadWorkitem(this)">
+								<span data-ben-model="getSummary()" />								
+						</a></td>
+						
+
+						<td><span data-ben-model="getItem('$modified')" /> by <span
+							data-ben-model="getItem('namcurrenteditor')"></span></td>
+
+					
+						<td><span data-ben-model="getItem('txtworkflowstatus')" /></td>
+
+						
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+
+
