@@ -1,10 +1,10 @@
 "use strict";
 
 // define namespace
-IMIXS.namespace("org.imixs.workflow.adminclient");
+IMIXS.namespace("org.imixs.workflow.sample.app");
 
 // define core module
-IMIXS.org.imixs.workflow.adminclient = (function() {
+IMIXS.org.imixs.workflow.sample.app = (function() {
 	if (!BENJS.org.benjs.core) {
 		console.error("ERROR - missing dependency: benjs.js");
 	}
@@ -22,8 +22,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 	 * 
 	 **************************************************************************/
 
-	
-
 	/* WorklistController */
 	Worklist = function() {
 		this.query = "SELECT entity FROM Entity entity where entity.type='workitem' ORDER BY entity.modified DESC";
@@ -31,6 +29,7 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 		this.start = 0;
 		this.count = 10;
 		this.$activityid = 0;
+		this.selectedUniqueID;
 	},
 
 	/* WorklistController */
@@ -38,7 +37,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 		imixs.ItemCollection.call(this, itemarray);
 		this.id = '';
 
-		
 		/* return summary or txtname */
 		this.getSummary = function() {
 			var val = this.getItem("txtworkflowsummary");
@@ -48,7 +46,7 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 				val = " - no title - ";
 			return val;
 		}
-		
+
 	},
 
 	/***************************************************************************
@@ -56,8 +54,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 	 * CONTROLLERS
 	 * 
 	 **************************************************************************/
-
-
 
 	worklistController = benJS.createController({
 		id : "worklistController",
@@ -74,7 +70,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 	 * ROUTES & TEMPLATES
 	 * 
 	 **************************************************************************/
-	
 
 	worklistRoute = benJS.createRoute({
 		id : "worklist-route",
@@ -98,9 +93,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 			$("#imixs-nav ul li:nth-child(2)").addClass('active');
 		}
 	}),
-
-
-
 
 	contentTemplate = benJS.createTemplate({
 		id : "content",
@@ -162,24 +154,23 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 
 	};
 
-	
-	/* Custom method to load a single workite */
+	/* Custom method to load a single workitem */
 	workitemController.loadWorkitem = function(context) {
 
-		var entry = $('span', context);
-		if (entry.length == 1) {
+		// get workitem out of view model....
+		var entry = $(context).closest('[data-ben-entry]');
+		var entryNo = $(entry).attr("data-ben-entry");
+		var workitem = new imixs.ItemCollection(
+				worklistController.model.view[entryNo].item);
+		worklistController.model.selectedUniqueID = workitem
+				.getItem('$uniqueid');
 
-			var id = $(entry).text();
-
-			workitemController.model.id = id;
-		}
-
-		console
-				.debug("load workitem: '" + workitemController.model.id
-						+ "'...");
+		console.debug("load workitem: '"
+				+ worklistController.model.selectedUniqueID + "'...");
 
 		var url = "";
-		url = url + "/workflow/rest-service/workflow/workitem/" + workitemController.model.id;
+		url = url + "./rest-service/workflow/workitem/"
+				+ worklistController.model.selectedUniqueID;
 
 		$.ajax({
 			type : "GET",
@@ -189,7 +180,7 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 				console.debug(response);
 				workitemController.model.item = imixsXML.xml2entity(response);
 				workitemRoute.route();
-				//workitemController.push();
+				// workitemController.push();
 			},
 			error : function(jqXHR, error, errorThrown) {
 				$("#error-message").text(errorThrown);
@@ -199,20 +190,20 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 
 	}
 
-	
-	
-	
-
-	/* Custom method to load a worklist */
+	/**
+	 * Custom method to load a worklist. The method loads only a subset of
+	 * attributes defined by the query param 'items'
+	 */
 	worklistController.loadWorklist = function() {
 		worklistController.pull();
 		console.debug("load worklist: '" + worklistController.model.query
 				+ "'...");
 
+		var items = "&items=$uniqueid,txtworkflowsummary,$creator,$modified,txtworkflowstatus,namcurrenteditor"
 		var url = "./rest-service";
 		url = url + "/workflow/worklist/";
 		url = url + "?start=" + worklistController.model.start + "&count="
-				+ worklistController.model.count;
+				+ worklistController.model.count + items;
 
 		$.ajax({
 			type : "GET",
@@ -232,9 +223,6 @@ IMIXS.org.imixs.workflow.adminclient = (function() {
 
 	}
 
-	
-	
-	
 	// public API
 	return {
 		Workitem : Workitem,
@@ -250,7 +238,6 @@ function layoutSection(templ, context) {
 	// $(context).i18n();
 	// $(context).imixsLayout();
 	$("#imixs-error").hide();
-	
-	
+
 };
 
