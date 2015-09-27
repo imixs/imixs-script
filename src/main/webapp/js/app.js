@@ -14,8 +14,11 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	if (!IMIXS.org.imixs.xml) {
 		console.error("ERROR - missing dependency: imixs-xml.js");
 	}
+	if (!IMIXS.org.imixs.ui) {
+		console.error("ERROR - missing dependency: imixs-ui.js");
+	}
 
-	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml,
+	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml, imixsUI = IMIXS.org.imixs.ui,
 	/***************************************************************************
 	 * 
 	 * MODELS
@@ -112,6 +115,9 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 		worklistRoute.route();
 		$("#imixs-error").hide();
+		
+		// set default date format
+		imixsUI.dateFormat='dd.mm.y';
 	};
 
 	/* Custom method to process a single workitem */
@@ -229,6 +235,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		worklistController : worklistController,
 		workitemController : workitemController,
 		worklistRoute : worklistRoute,
+		//imixsUI: imixsUI,
 		start : start
 	};
 
@@ -240,7 +247,6 @@ function layoutSection(templ, context) {
 	$("#imixs-error").hide();
 
 	// jquery-ui
-	setDateFormat('dd.MM.yyyy');
 	$(context).imixsLayout();
 
 	// layout tinymce

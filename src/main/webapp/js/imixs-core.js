@@ -47,18 +47,15 @@ IMIXS.namespace = function(ns_string) {
 
 };
 
-
-
 IMIXS.namespace("org.imixs.core");
 
 IMIXS.org.imixs.core = (function() {
 
-
 	// private properties
 	var _not_used,
-	
+
 	/* Imixs ItemCollection */
-	 ItemCollection= function (itemarray) {
+	ItemCollection = function(itemarray) {
 
 		if (!itemarray) {
 			// if no itemarray is provided than create an empty one
@@ -67,7 +64,8 @@ IMIXS.org.imixs.core = (function() {
 			if ($.isArray(itemarray)) {
 				this.item = itemarray;
 			} else {
-				// we test now which object is provided - entity or an item[]....
+				// we test now which object is provided - entity or an
+				// item[]....
 				if (itemarray.entity && $.isArray(itemarray.entity.item)) {
 					this.item = itemarray.entity.item;
 				} else if ($.isArray(itemarray.item)) {
@@ -77,9 +75,9 @@ IMIXS.org.imixs.core = (function() {
 		}
 
 		/**
-		 * This method is used to return the value array of a name item inside the
-		 * current ItemCollection. If no item with this name exists the method adds
-		 * a new element with this name.
+		 * This method is used to return the value array of a name item inside
+		 * the current ItemCollection. If no item with this name exists the
+		 * method adds a new element with this name.
 		 */
 		this.getItem = function(fieldName) {
 			if (!this.item)
@@ -136,17 +134,29 @@ IMIXS.org.imixs.core = (function() {
 		}
 
 		/**
-		 * formats a date output
+		 * formats a date output.
+		 * 
+		 * The method accepts a format parameter to format the date output. If no format
+		 * is defined the method test is the imixs.ui library is available. If not the 
+		 * default output format 'dd.mm.yy' is used. 
 		 */
-		this.getItemDate = function(fieldName) {
+		this.getItemDate = function(fieldName, format) {
+			// set default date format
+			if (!format) {
+				// test if UI dateFormat is available
+				if (IMIXS.org.imixs.ui) {
+					format = IMIXS.org.imixs.ui.dateFormat;
+				} else {
+					format = 'dd.mm.yy';
+				}
+			}
 			var value = this.getItem(fieldName);
-			return $.datepicker.formatDate('dd. M yy', new Date(value));
-
+			return $.datepicker.formatDate(format, new Date(value));
 		}
 
 		/**
-		 * Update the item array depending on the provided object type. The method
-		 * accepts entity, item[] or XMLDocuments
+		 * Update the item array depending on the provided object type. The
+		 * method accepts entity, item[] or XMLDocuments
 		 */
 		this.setEntity = function(data) {
 
@@ -173,14 +183,10 @@ IMIXS.org.imixs.core = (function() {
 		}
 
 	};
-	
-	
+
 	// public API
 	return {
 		ItemCollection : ItemCollection
 	};
-	
+
 }());
-
-
-

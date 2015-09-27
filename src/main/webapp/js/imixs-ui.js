@@ -27,9 +27,22 @@
  */
 
 
+IMIXS.namespace("org.imixs.ui");
+IMIXS.org.imixs.ui = (function() {
 
-// default jQuery date format
-var dateDisplayFormat = "yy-mm-dd";
+	
+
+	// private properties
+
+	// default jQuery date format
+	var dateFormat = "dd.mm.y";
+	// public API
+	return {
+		dateFormat : dateFormat
+	};
+
+}());
+
 
 /*
  * This method converts a Java Date String into the jQuery format. See:
@@ -40,7 +53,7 @@ var dateDisplayFormat = "yy-mm-dd";
  * the JavaFormat in a jquery understandable format. Also the locale need to be
  * set!
  */
-function setDateFormat(javaDate) {
+function setJavaDateFormat(javaDate) {
 
 	// convert yyyy to yy,
 	// yy to y,
@@ -62,7 +75,7 @@ function setDateFormat(javaDate) {
 		javaDate = javaDate.replace('M', 'm');
 
 	// set jquery date format
-	dateDisplayFormat = javaDate;
+	dateFormat = javaDate;
 }
 
 /*
@@ -152,7 +165,7 @@ $.fn.imixsLayout = function(options) {
 		$(".imixs-date", this).datepicker({
 			showOtherMonths : true,
 			selectOtherMonths : true,
-			dateFormat : dateDisplayFormat
+			dateFormat : IMIXS.org.imixs.ui.dateFormat
 		});
 
 		// initialize datetime picker widget
