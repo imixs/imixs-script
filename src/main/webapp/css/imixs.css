@@ -278,6 +278,14 @@ dd textarea {
 	margin: 0.2em;
 }
 
+
+.imixs-date {
+    width: 120px !important;
+    background: url(calendar.png) no-repeat scroll left center white;
+    padding-left: 20px !important;
+}
+
+
 @media screen and (max-width: 768px) {
 	.imixs-form-section-2 dl {
 		clear: both;

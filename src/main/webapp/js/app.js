@@ -190,8 +190,8 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 	}
 
-	/**
-	 * Custom method to load a worklist. The method loads only a subset of
+	/*
+	 * Custom method to load a workList. The method loads only a subset of
 	 * attributes defined by the query param 'items'
 	 */
 	worklistController.loadWorklist = function() {
@@ -234,10 +234,20 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 }());
 
+
 function layoutSection(templ, context) {
 	// $(context).i18n();
-	// $(context).imixsLayout();
 	$("#imixs-error").hide();
 
+	// jquery-ui
+	setDateFormat('dd.MM.yyyy');
+	$(context).imixsLayout();
+
+	// layout tinymce
+	$('textarea.imixs-editor').tinymce({
+		// options
+	});
+
+	
 };
 

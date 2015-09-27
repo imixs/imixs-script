@@ -1,15 +1,8 @@
 <div class="row">
 
-
-	<div data-ben-controller="workitemController">
-
 		<h1>Workitem:</h1>
 
-
-		<div class="imixs-form-section">
-			<input type="button" value="Close" onclick="adminclient.queryRoute.route()"
-				class="btn" />
-		</div>
+	<div data-ben-controller="workitemController">
 
 
 		<!-- Error message -->
@@ -24,34 +17,40 @@
 		</div>
 
 
-		<table>
-			<thead>
-				<tr>
-					<th></th>
-					<th>Field</th>
-					<th>Value</th>
-				</tr>
-			</thead>
-			<tbody data-ben-foreach="getSortedItemlist()">
-				<tr>
+			<!-- **** General info ***** -->
+	<dl>
+		<dt>Subject:
+		</dt>
+		<dd style="width: 400px;">
+		<input type="text" data-ben-model="getItem('txtsubject')" />
+		
+			
+		</dd>
 
-					<td><span data-ben-model="indexIcon"/></td>
+		<dt>
+			Date:
+		</dt>
+		<dd>
+			<input type="text" class="imixs-date" data-ben-model="getItem('datdate')" />
+		</dd>
 
-					<td><span style="font-weight: bold;" data-ben-model="name"></span></td>
-					<td><span data-ben-foreach="value"> <!-- here we need a data-ben-rendered feature to avoid emtpy entries -->
-							<span style="font-weight: bold;"
-							data-ben-model="model['xsi:type']"></span> : <span
-							data-ben-model="model['$']"></span><br />
-					</span></td>
-				</tr>
-			</tbody>
-		</table>
+		<dt>Team:
+		</dt>
+		<dd>
+			xxx
+		</dd>
 
 
+		<dt>Details</dt>
+		<dd>
+		<textarea class="imixs-editor" data-ben-model="getItem('htmlabstract')"></textarea>
+			
+		</dd>
+	</dl>
 	</div>
 
 	<div class="imixs-form-section">
-		<input type="button" value="Close" onclick="adminclient.queryRoute.route()"
+		<input type="button" value="Close" onclick="app.worklistRoute.route()"
 				class="btn" />
 	</div>
 
