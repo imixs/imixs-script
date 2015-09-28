@@ -17,8 +17,11 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	if (!IMIXS.org.imixs.ui) {
 		console.error("ERROR - missing dependency: imixs-ui.js");
 	}
+	if (!IMIXS.org.imixs.workflow) {
+		console.error("ERROR - missing dependency: imixs-workflow.js");
+	}
 
-	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml, imixsUI = IMIXS.org.imixs.ui,
+	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml, imixsUI = IMIXS.org.imixs.ui,  imixsWorkflow = IMIXS.org.imixs.workflow,
 	/***************************************************************************
 	 * 
 	 * MODELS
@@ -94,6 +97,31 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		afterRoute : function(router) {
 			$("#imixs-nav ul li").removeClass('active');
 			$("#imixs-nav ul li:nth-child(2)").addClass('active');
+			
+			// update activities
+			imixsWorkflow.loadActivityList({
+				workitem:workitemController.model,
+				success : function(activityList) {
+					
+					console.debug( "found " + activityList.length + " activities :-)");
+					// render activity buttons....
+				//	$("#workitem_activities").empty();
+					
+					imixsWorkflow.appendActivityActions( 
+							{
+								context: "#workitem_activities",
+								styleClass: "btn"
+							}
+					);
+					
+					$("#workitem_activities").imixsLayout();
+					
+				},
+				error: function(activityList) {					
+					$("#workitem_activities").empty();
+				}
+			 });
+			
 		}
 	}),
 
@@ -107,6 +135,10 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	 */
 	start = function() {
 		console.debug("starting application...");
+		
+		// init service base URL
+		imixsWorkflow.serviceURL="/imixs-script/rest-service";
+
 
 		// start view
 		benJS.start({
@@ -122,6 +154,31 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 	/* Custom method to process a single workitem */
 	workitemController.processWorkitem = function(workitem) {
+
+		imixsWorkflow.processWorkitem({
+			workitem:workitem,
+			success : function(response) {
+				printLog(".", true);
+			},
+			error : function(workitem) {
+				var uniqueid = workitem.getItem('$uniqueid');
+				var error_code = workitem.getItem('$error_code');
+				var error_message = workitem.getItem('$error_message');
+
+				printLog("<br />" + uniqueid + " : " + error_code + " - "
+						+ error_message, true);
+
+				$("#error-message").text("BulkUpdate failed");
+				$("#imixs-error").show();
+			}
+		})
+		
+		
+		
+	};
+
+	/*xxxxxxxxxxxxxx Custom method to process a single workitem */
+	workitemController.xxxxxxxxxxxxprocessWorkitem = function(workitem) {
 
 		var xmlData = imixsXML.json2xml(workitem);
 		// console.debug(xmlData);
@@ -160,8 +217,43 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 	};
 
+	
+
 	/* Custom method to load a single workitem */
 	workitemController.loadWorkitem = function(context) {
+
+		// get workitem out of view model....
+		var entry = $(context).closest('[data-ben-entry]');
+		var entryNo = $(entry).attr("data-ben-entry");
+		var workitem = new imixs.ItemCollection(
+				worklistController.model.view[entryNo].item);
+		worklistController.model.selectedUniqueID = workitem
+				.getItem('$uniqueid');
+
+		console.debug("load workitem: '"
+				+ worklistController.model.selectedUniqueID + "'...");
+
+		imixsWorkflow.loadWorkitem({
+			uniqueID: worklistController.model.selectedUniqueID,
+			success : function(response) {
+				console.debug(response);
+				workitemController.model.item = imixsXML.xml2entity(response);
+				workitemRoute.route();
+				// workitemController.push();
+			},
+			error : function(jqXHR, error, errorThrown) {
+				$("#error-message").text(errorThrown);
+				$("#imixs-error").show();
+			}
+		})
+		
+
+	}
+	
+	
+	
+	/* Custom method to load a single workitem */
+	workitemController.xxxloadWorkitem = function(context) {
 
 		// get workitem out of view model....
 		var entry = $(context).closest('[data-ben-entry]');
@@ -243,6 +335,8 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 
 function layoutSection(templ, context) {
+	
+		
 	// $(context).i18n();
 	$("#imixs-error").hide();
 

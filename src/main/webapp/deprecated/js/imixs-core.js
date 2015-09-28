@@ -22,7 +22,7 @@
 /**
  * This library provides the core module functionality
  * 
- * Version 1.0.1
+ * Version 1.0.2
  */
 
 var IMIXS = IMIXS || {};
@@ -56,6 +56,20 @@ IMIXS.org.imixs.core = (function() {
 
 	// private properties
 	var _not_used,
+	
+	
+	/**
+	 * Helper method to test for HTML 5 localStorage...
+	 * 
+	 * @returns {Boolean}
+	 */
+	hasLocalStorage = function () {
+		try {
+			return 'localStorage' in window && window['localStorage'] !== null;
+		} catch (e) {
+			return false;
+		}
+	},
 	
 	/* Imixs ItemCollection */
 	 ItemCollection= function (itemarray) {
@@ -177,6 +191,7 @@ IMIXS.org.imixs.core = (function() {
 	
 	// public API
 	return {
+		hasLocalStorage: hasLocalStorage,
 		ItemCollection : ItemCollection
 	};
 	
