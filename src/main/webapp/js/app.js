@@ -99,20 +99,24 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 			$("#imixs-nav ul li:nth-child(2)").addClass('active');
 			
 			// update activities
-			imixsWorkflow.loadActivityList({
+			imixsWorkflow.loadActivities({
 				workitem:workitemController.model,
-				success : function(activityList) {
+				success : function(activities) {
 					
-					console.debug( "found " + activityList.length + " activities :-)");
-					// render activity buttons....
-				//	$("#workitem_activities").empty();
-					
-					imixsWorkflow.appendActivityActions( 
-							{
+					console.debug( "found " + activities.length + " activities :-)");
+					imixsUI.renderActivities({
+								activities: activities,
 								context: "#workitem_activities",
-								styleClass: "btn"
-							}
-					);
+								styleClass: "btn",
+								onclick: function(activity) {					
+									alert('huhu alles gut - click: ' + activity.getItem('txtname'));
+									
+									workitemController.pull();
+								//	workitemController.model
+									workitemController.processWorkitem();
+									
+								}
+					});
 					
 					$("#workitem_activities").imixsLayout();
 					
@@ -153,14 +157,15 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	};
 
 	/* Custom method to process a single workitem */
-	workitemController.processWorkitem = function(workitem) {
+	workitemController.processWorkitem = function() {
 
 		imixsWorkflow.processWorkitem({
-			workitem:workitem,
+			workitem:workitemController.model,
 			success : function(response) {
 				printLog(".", true);
 			},
 			error : function(workitem) {
+				workitemController.model=workitem;
 				var uniqueid = workitem.getItem('$uniqueid');
 				var error_code = workitem.getItem('$error_code');
 				var error_message = workitem.getItem('$error_message');
@@ -320,7 +325,10 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		});
 
 	}
-
+	
+	
+	
+	
 	// public API
 	return {
 		Workitem : Workitem,

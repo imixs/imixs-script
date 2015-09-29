@@ -20,29 +20,108 @@
  ******************************************************************************/
 
 /**
- * This library provides methods to layout page elements with the jQuery-UI framework.
+ * This library provides methods to layout Imixs-Workflow page elements with the
+ * jQuery-UI framework.
+ * 
  * 
  * 
  * Version 1.0.1
  */
 
-
 IMIXS.namespace("org.imixs.ui");
 IMIXS.org.imixs.ui = (function() {
 
-	
+	if (!IMIXS.org.imixs.core) {
+		console.error("ERROR - missing dependency: imixs-core.js");
+	}
 
 	// private properties
+	var imixs = IMIXS.org.imixs.core,
 
 	// default jQuery date format
-	var dateFormat = "dd.mm.y";
+	dateFormat = "dd.mm.y",
+
+	/**
+	 * The method appends for each activity entity an action button. The method
+	 * did not add activity buttons with the activityEntity property
+	 * keypublicresult!=0.
+	 * 
+	 * params: activities, context, onclick;
+	 */
+	renderActivities = function(options) {
+
+		// render action button for each activity
+		$.each(options.activities, function(i, entity) {
+			var activity = new imixs.ItemCollection(entity);
+			var testPublicResult = activity.getItem("keypublicresult");
+			if ("0" != testPublicResult) {
+				renderActionButton({
+					activity:activity,
+					context : options.context,
+					insert : false,
+					styleClass : options.styleClass,
+					onclick: options.onclick
+				});
+
+			}
+		
+		});
+	},
+
+	/**
+	 * The method appends an action button to a given context.
+	 * 
+	 * Params:
+	 * 
+	 * context, activity, insert, styleClass, onclick
+	 */
+	renderActionButton = function(options) {
+		
+		var actionName = options.activity.getItem('txtname');
+		var actionID = options.activity.getItem('numactivityid');
+		var tooltipText = options.activity.getItem('rtfdescription');
+
+		
+		// build conclick event....
+//		var _activityScript = "onclick=\"processWorkitem('" + options.id
+//				+ "');";
+
+		// build tooltip span tag
+		var _tooltip = "";
+		if (tooltipText != "")
+			_tooltip = "<span class=\"imixs-tooltip\">" + tooltipText
+					+ "</span>";
+
+		var _button = "<input type=\"submit\" class=\"" + options.styleClass
+				+ "\" id=\"workflow_activity_" + actionID + "\" value=\""
+				+ actionName + "\" " 
+				+ "\" title=\"\"></input>" + _tooltip;
+		
+		var jQueryButton=$.parseHTML(_button);
+		$(jQueryButton).click(
+				function(event) {
+					//alert('huhu click: ' + options.activity.getItem('txtname'));
+					options.onclick(options.activity)
+				});
+		
+		// insert at the beginning of the tag?
+		if (options.insert)
+			$(options.context).prepend(jQueryButton);
+		else
+			$(options.context).append(jQueryButton);
+
+		
+		
+		
+	}
+
 	// public API
 	return {
-		dateFormat : dateFormat
+		dateFormat : dateFormat,
+		renderActivities : renderActivities
 	};
 
 }());
-
 
 /*
  * This method converts a Java Date String into the jQuery format. See:
@@ -188,13 +267,11 @@ $.fn.imixsLayout = function(options) {
 					});
 
 				});
-		
-		$('.imixsFileUpload').imixsLayoutFileUpload();
 
+		$('.imixsFileUpload').imixsLayoutFileUpload();
 
 	});
 };
-
 
 $.fn.layoutImixsTable = function(options) {
 	var defaults = {
@@ -288,130 +365,150 @@ $.fn.layoutImixsTooltip = function(options) {
 	});
 };
 
+$.fn.layoutImixsEditor = function(rootContext, _with, _height) {
 
-$.fn.layoutImixsEditor = function(rootContext,_with,_height) {
-
-	return this.each(function() {
-		$(this).tinymce(
-		{
-			// Location of TinyMCE script
-			script_url : rootContext+'/imixs/tinymce/jscripts/tiny_mce/tiny_mce.js',
-			width : _with,
-			height : _height,
-			// General options
-			theme : "advanced",
-			plugins : "inlinepopups,fullscreen",
-			// Theme options
-			theme_advanced_buttons1 : "cut,copy,paste,removeformat,cleanup,|,undo,redo,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,bullist,numlist,",
-			theme_advanced_buttons2 : "formatselect,fontsizeselect,outdent,indent,blockquote,|,link,unlink,image,|,forecolor,backcolor,|,fullscreen,code",
-			theme_advanced_toolbar_location : "top",
-			theme_advanced_toolbar_align : "left",
-			theme_advanced_statusbar_location : "bottom",
-			theme_advanced_resizing : true,
-			content_css : rootContext+"/imixs/tinymce/content.css"
-		})
-	});
+	return this
+			.each(function() {
+				$(this)
+						.tinymce(
+								{
+									// Location of TinyMCE script
+									script_url : rootContext
+											+ '/imixs/tinymce/jscripts/tiny_mce/tiny_mce.js',
+									width : _with,
+									height : _height,
+									// General options
+									theme : "advanced",
+									plugins : "inlinepopups,fullscreen",
+									// Theme options
+									theme_advanced_buttons1 : "cut,copy,paste,removeformat,cleanup,|,undo,redo,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,bullist,numlist,",
+									theme_advanced_buttons2 : "formatselect,fontsizeselect,outdent,indent,blockquote,|,link,unlink,image,|,forecolor,backcolor,|,fullscreen,code",
+									theme_advanced_toolbar_location : "top",
+									theme_advanced_toolbar_align : "left",
+									theme_advanced_statusbar_location : "bottom",
+									theme_advanced_resizing : true,
+									content_css : rootContext
+											+ "/imixs/tinymce/content.css"
+								})
+			});
 };
 
-
-
-
-/** jquery fileupload methods **/
+/** jquery fileupload methods * */
 
 /* This method initializes the imixs fileupload component */
 $.fn.imixsInitFileUpload = function(options) {
 	return this.each(function() {
-		$('body').on('click', '#imixsFileUpload_button', function() { 
-		    $('#imixsFileUpload_input').trigger('click');   
-		    return false;
-		});			
-		
-		// draganddrop fileupload
-		 $('#imixsFileUpload_input').fileupload({
-		        dataType: 'json',
-		        done: function (e, data) {
-		        	refreshFileList(data.result.files);
-		        	$('#imixsFileUpload_button').blur();
-		        },		
-		        fail: function (e, data) {
-		            alert("Unable to add file!");
-		        },
-		        progressall: function (e, data) {
-		            var progress = parseInt(data.loaded / data.total * 100, 10);
-		            if (progress==100)
-		            	progress=0;
-		            $('#imixsFileUpload_progress_bar').css(
-		                'width',
-		                progress + '%'
-		            );
-		        }
-		    });
-	}); 
-};
+		$('body').on('click', '#imixsFileUpload_button', function() {
+			$('#imixsFileUpload_input').trigger('click');
+			return false;
+		});
 
+		// draganddrop fileupload
+		$('#imixsFileUpload_input').fileupload(
+				{
+					dataType : 'json',
+					done : function(e, data) {
+						refreshFileList(data.result.files);
+						$('#imixsFileUpload_button').blur();
+					},
+					fail : function(e, data) {
+						alert("Unable to add file!");
+					},
+					progressall : function(e, data) {
+						var progress = parseInt(data.loaded / data.total * 100,
+								10);
+						if (progress == 100)
+							progress = 0;
+						$('#imixsFileUpload_progress_bar').css('width',
+								progress + '%');
+					}
+				});
+	});
+};
 
 /* This method layouts the imixs fileupload component */
 $.fn.imixsLayoutFileUpload = function(options) {
 	return this.each(function() {
 		// hide fileupload and replace with imixsFile-Button
-		$('#imixsFileUpload_input').hide();			
+		$('#imixsFileUpload_input').hide();
 		$('#imixsFileUpload_button').button({
-		      icons: {primary: "ui-icon-folder-open"}
+			icons : {
+				primary : "ui-icon-folder-open"
+			}
 		});
-		$('.imixsFileUpload_delete','.imixsFileUpload_uploadlist').button({
-		      icons: {primary: "ui-icon-close"}
+		$('.imixsFileUpload_delete', '.imixsFileUpload_uploadlist').button({
+			icons : {
+				primary : "ui-icon-close"
+			}
 		});
-	}); 
+	});
 };
 
-
-
-function refreshFileList(files) {		
+function refreshFileList(files) {
 	// remove uploded file info form table
 	$('.imixsFileUpload_uploaded_file').remove();
-	$.each(files, function (index, file) {
-		var fileLink='<a href="'+file.url+'" target="_blank" >'+file.name+'</a>';
-        var cancelButton='<button class="imixsFileUpload_delete" onclick="cancelFileUpload(\''+file.name + '\');return false;">Delete</button>';
-        var row='<tr class="imixsFileUpload_uploaded_file"><td class="imixsFileUpload_uploadlist_name">'+fileLink+'</td><td class="imixsFileUpload_uploadlist_size">'+fileSizeToString(file.size)+'</td><td class="imixsFileUpload_uploadlist_cancel">'+cancelButton+'</td></tr>';
-        $('.imixsFileUpload_uploadlist').append(row);
-    });
-	$('button','.imixsFileUpload_uploadlist').button({
-	      icons: {primary: "ui-icon-close"}
+	$
+			.each(
+					files,
+					function(index, file) {
+						var fileLink = '<a href="' + file.url
+								+ '" target="_blank" >' + file.name + '</a>';
+						var cancelButton = '<button class="imixsFileUpload_delete" onclick="cancelFileUpload(\''
+								+ file.name
+								+ '\');return false;">Delete</button>';
+						var row = '<tr class="imixsFileUpload_uploaded_file"><td class="imixsFileUpload_uploadlist_name">'
+								+ fileLink
+								+ '</td><td class="imixsFileUpload_uploadlist_size">'
+								+ fileSizeToString(file.size)
+								+ '</td><td class="imixsFileUpload_uploadlist_cancel">'
+								+ cancelButton + '</td></tr>';
+						$('.imixsFileUpload_uploadlist').append(row);
+					});
+	$('button', '.imixsFileUpload_uploadlist').button({
+		icons : {
+			primary : "ui-icon-close"
+		}
 	});
 }
-
 
 /**
  * reloads the uploaded files and refresh the filelist
  */
-function updateFileUpload() {	
+function updateFileUpload() {
 	// upload url
-	var base_url=$('#imixsFileUpload_input').attr( 'data-url' );	
-	$.ajax({url:base_url,
-		type: 'GET',
-		dataType: "json",
-		success:function(data){
+	var base_url = $('#imixsFileUpload_input').attr('data-url');
+	$.ajax({
+		url : base_url,
+		type : 'GET',
+		dataType : "json",
+		success : function(data) {
 			refreshFileList(data.files);
-		}			
-	});			
+		}
+	});
 }
 
-function cancelFileUpload(file) {	
+function cancelFileUpload(file) {
 	// upload url
-	var base_url=$('#imixsFileUpload_input').attr( 'data-url' );	
-	$.ajax({url:base_url+file,
-		type: 'DELETE',
-		dataType: "json",
-		success:function(data){
+	var base_url = $('#imixsFileUpload_input').attr('data-url');
+	$.ajax({
+		url : base_url + file,
+		type : 'DELETE',
+		dataType : "json",
+		success : function(data) {
 			refreshFileList(data.files);
-		}			
-	});			
+		}
+	});
 }
 
 function fileSizeToString(bytes) {
-	if (bytes>=1000000000) {bytes=(bytes/1000000000).toFixed(2)+' GB';}
-        else if (bytes>=1000000)    {bytes=(bytes/1000000).toFixed(2)+' MB';}
-        else if (bytes>=1000)      {bytes=(bytes/1000).toFixed(2)+' KB';}
-        else {bytes=bytes+' bytes';}
-    return bytes;
+	if (bytes >= 1000000000) {
+		bytes = (bytes / 1000000000).toFixed(2) + ' GB';
+	} else if (bytes >= 1000000) {
+		bytes = (bytes / 1000000).toFixed(2) + ' MB';
+	} else if (bytes >= 1000) {
+		bytes = (bytes / 1000).toFixed(2) + ' KB';
+	} else {
+		bytes = bytes + ' bytes';
+	}
+	return bytes;
 }

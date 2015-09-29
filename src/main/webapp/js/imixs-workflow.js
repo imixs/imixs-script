@@ -33,18 +33,13 @@ IMIXS.org.imixs.workflow = (function() {
 	if (!IMIXS.org.imixs.core) {
 		console.error("ERROR - missing dependency: imixs-core.js");
 	}
-	
+
 	if (!IMIXS.org.imixs.xml) {
 		console.error("ERROR - missing dependency: imixs-xml.js");
 	}
-	
-	
-	// private properties
-	var serviceURL,
-	activityList,
-	imixs = IMIXS.org.imixs.core,
-	imixsXML = IMIXS.org.imixs.xml,
 
+	// private properties
+	var serviceURL, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml,
 
 	// validates servcieURL
 	getServiceURL = function() {
@@ -54,18 +49,17 @@ IMIXS.org.imixs.workflow = (function() {
 		}
 		return url;
 	},
-	
+
 	/**
 	 * Custom method to load a single workitem from the service base URL
 	 */
 	loadWorkitem = function(options) {
-		var d=this.serviceURL;
-		var e=serviceURL;
-		
+		var d = this.serviceURL;
+		var e = serviceURL;
+
 		var url = getServiceURL();
 
-		url = url + "workflow/workitem/"
-				+ options.uniqueID;
+		url = url + "workflow/workitem/" + options.uniqueID;
 
 		$.ajax({
 			type : "GET",
@@ -77,17 +71,14 @@ IMIXS.org.imixs.workflow = (function() {
 
 	},
 
-	
-	
-
 	/* Custom method to process a single workitem */
 	processWorkitem = function(options) {
 		var url = getServiceURL();
-		
+
 		var xmlData = imixsXML.json2xml(options.workitem);
 		// console.debug(xmlData);
-		console.debug("process workitem: '" + options.workitem.getItem('$uniqueid')
-				+ "'...");
+		console.debug("process workitem: '"
+				+ options.workitem.getItem('$uniqueid') + "'...");
 
 		url = url + "workflow/workitem/";
 
@@ -107,7 +98,7 @@ IMIXS.org.imixs.workflow = (function() {
 				var error_code = workitem.getItem('$error_code');
 				var error_message = workitem.getItem('$error_message');
 
-				console.debug( uniqueid + " : " + error_code + " - "
+				console.debug(uniqueid + " : " + error_code + " - "
 						+ error_message, true);
 
 				options.error(workitem);
@@ -116,20 +107,18 @@ IMIXS.org.imixs.workflow = (function() {
 		});
 
 	},
-	
-	
-	
-	
-	
-	
+
 	/**
-	 * This method loads the activitylist for a workitem.
+	 * This method loads the activity list for a workItem.
 	 * 
-	 * The method uses the browsers localStorage to cache objects. 
+	 * After the activityList was loaded the call-back-method
+	 * success(activityList) will be called.
+	 * 
+	 * The method uses the browsers localStorage to cache objects.
 	 * 
 	 */
-	loadActivityList = function(options) {
-		
+	loadActivities = function(options) {
+		var activityList;
 		var modelversion = options.workitem.getItem('$modelversion');
 		var processid = options.workitem.getItem('$processid');
 
@@ -143,8 +132,7 @@ IMIXS.org.imixs.workflow = (function() {
 			// now we need to load the model information from the rest
 			// service...
 			var url = getServiceURL();
-			url = url + "model/" + modelversion
-							+ "/activities/" + processid;
+			url = url + "model/" + modelversion + "/activities/" + processid;
 
 			$.ajax({
 				type : "GET",
@@ -152,21 +140,20 @@ IMIXS.org.imixs.workflow = (function() {
 				dataType : "xml",
 				success : function(response) {
 					activityList = imixsXML.xml2collection(response);
-					
+
 					if (imixs.hasLocalStorage()) {
-						localStorage.setItem(
-								"org.imixs.workflow.activities."
-										+ modelversion + "." + processid,
-								JSON.stringify(activityList));
+						localStorage.setItem("org.imixs.workflow.activities."
+								+ modelversion + "." + processid, JSON
+								.stringify(activityList));
 					}
-					
+
 					if ($.isFunction(options.success)) {
 						options.success(activityList);
 					}
 				},
 				error : options.error
 			});
-			
+
 		} else {
 			// already cached
 			if ($.isFunction(options.success)) {
@@ -174,83 +161,14 @@ IMIXS.org.imixs.workflow = (function() {
 			}
 		}
 
-	},
-	
-	
-	/**
-	 * Appends for each activity entity an activity button
-	 * 
-	 * params: actitvitList, context;
-	 */
-	appendActivityActions = function(options) {
-		
-		// test options...
-		if (options.activityList) {
-			activityList=options.activityList;
-		}
-		
-		$.each(activityList,
-				function(i, entity) {
-			var activity=new imixs.ItemCollection(entity);
-			var actionName = activity.getItem('txtname');
-			var actionID =  activity.getItem('numactivityid');
-			var tooltipText = activity.getItem('rtfdescription');
-			renderActionButton( {
-				context:options.context,
-				name:  actionName,	
-				id: actionID,
-				insert:false,
-				tooltip:tooltipText,
-				styleClass: options.styleClass
-				});
-			
-			
-		});
-	},
-	
-	
-	
-	/**
-	 * appends an action button to a given context.
-	 * 
-	 * Params:
-	 * 
-	 * context, name, id, insert, tooltip
-	 */ 
-	renderActionButton = function(options) {
-			// build conclick event....
-			var _activityScript = "onclick=\"processWorkitem('" + options.id + "');";
-
-			// build tooltip span tag
-			var _tooltip = "";
-			if (options.tooltip != "")
-				_tooltip = "<span class=\"imixs-tooltip\">" + options.tooltip
-						+ "</span>";
-
-			var _button="<input type=\"submit\" class=\"" + options.styleClass + "\" id=\"workflow_activity_"
-				+ options.id + "\" value=\"" + options.name + "\" "
-				+ _activityScript + "\" title=\"\"></input>"
-				+ _tooltip;
-			// insert at the beginning of the tag?
-			if (options.insert)
-				$(options.context).prepend(_button);
-			else
-				$(options.context).append(_button);
-
 	}
-	
 
 	// public API
 	return {
 		serviceURL : serviceURL,
-		activityList: activityList,
-		loadWorkitem: loadWorkitem,
-		processWorkitem: processWorkitem,
-		loadActivityList : loadActivityList,
-		appendActivityActions: appendActivityActions
+		loadWorkitem : loadWorkitem,
+		processWorkitem : processWorkitem,
+		loadActivities : loadActivities
 	};
-	
-	
-
 
 }());
