@@ -113,7 +113,16 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 									
 									workitemController.pull();
 								//	workitemController.model
-									workitemController.processWorkitem();
+									imixsWorkflow.processWorkitem({
+										workitem: workitemController.model,
+										activity: activity,
+										success: function() {
+											alert('process ok');
+										},
+										error: function() {
+											alert('process failed');
+										}
+									});
 									
 								}
 					});
@@ -157,7 +166,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	};
 
 	/* Custom method to process a single workitem */
-	workitemController.processWorkitem = function() {
+	workitemController.xxxprocessWorkitem = function() {
 
 		imixsWorkflow.processWorkitem({
 			workitem:workitemController.model,
@@ -302,7 +311,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		console.debug("load worklist: '" + worklistController.model.query
 				+ "'...");
 
-		var items = "&items=$uniqueid,txtworkflowsummary,$creator,$modified,txtworkflowstatus,namcurrenteditor"
+		var items = "&sortorder=2&items=$uniqueid,txtworkflowsummary,$creator,$modified,txtworkflowstatus,namcurrenteditor"
 		var url = "./rest-service";
 		url = url + "/workflow/worklist/";
 		url = url + "?start=" + worklistController.model.start + "&count="
