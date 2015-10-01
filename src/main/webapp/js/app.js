@@ -112,6 +112,9 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 									alert('huhu alles gut - click: ' + activity.getItem('txtname'));
 									
 									workitemController.pull();
+									
+							alert("txtsubject="+ workitemController.model.getItem('txtsubject'));		
+							//return false;		
 								//	workitemController.model
 									imixsWorkflow.processWorkitem({
 										workitem: workitemController.model,

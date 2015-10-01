@@ -53,14 +53,13 @@ IMIXS.org.imixs.core = (function() {
 
 	// private properties
 	var _not_used,
-	
 
 	/**
 	 * Helper method to test for HTML 5 localStorage...
 	 * 
 	 * @returns {Boolean}
 	 */
-	hasLocalStorage = function () {
+	hasLocalStorage = function() {
 		try {
 			return 'localStorage' in window && window['localStorage'] !== null;
 		} catch (e) {
@@ -88,6 +87,19 @@ IMIXS.org.imixs.core = (function() {
 			}
 		}
 
+		// returns the index pos of an item
+		this.findItem = function(fieldName) {
+			var resultKey = -1;
+			$.each(this.item, function(index, aitem) {
+				if (aitem && aitem.name == fieldName) {
+					resultKey = index;
+					return false;
+				}
+			});
+			return resultKey;
+
+		}
+
 		/**
 		 * This method is used to return the value array of a name item inside
 		 * the current ItemCollection. If no item with this name exists the
@@ -99,12 +111,14 @@ IMIXS.org.imixs.core = (function() {
 
 			var resultKey = -1;
 
-			$.each(this.item, function(index, aitem) {
-				if (aitem && aitem.name == fieldName) {
-					resultKey = index;
-					return false;
-				}
-			});
+			// $.each(this.item, function(index, aitem) {
+			// if (aitem && aitem.name == fieldName) {
+			// resultKey = index;
+			// return false;
+			// }
+			// });
+
+			resultKey = this.findItem(fieldName);
 
 			// check if field exists?
 			if (resultKey == -1) {
@@ -134,25 +148,33 @@ IMIXS.org.imixs.core = (function() {
 		/**
 		 * Adds a new item into the collection
 		 */
-		this.setItem = function(fieldname, value, xsiType) {
-			if (!xsiType)
-				xsiType = "xs:string";
-			var valueObj = {
-				"name" : fieldname,
-				"value" : [ {
-					"xsi:type" : xsiType,
-					"$" : value
-				} ]
-			};
-			this.item.push(valueObj);
+		this.setItem = function(fieldName, value, xsiType) {
+			// test if item still exists?
+			var resultKey = this.findItem(fieldName);
+
+			if (resultKey>-1) {
+				 this.item[resultKey].value[0]['$']=value;
+			} else {
+				// create item...
+				if (!xsiType)
+					xsiType = "xs:string";
+				var valueObj = {
+					"name" : fieldName,
+					"value" : [ {
+						"xsi:type" : xsiType,
+						"$" : value
+					} ]
+				};
+				this.item.push(valueObj);
+			}
 		}
 
 		/**
 		 * formats a date output.
 		 * 
-		 * The method accepts a format parameter to format the date output. If no format
-		 * is defined the method test is the imixs.ui library is available. If not the 
-		 * default output format 'dd.mm.yy' is used. 
+		 * The method accepts a format parameter to format the date output. If
+		 * no format is defined the method test is the imixs.ui library is
+		 * available. If not the default output format 'dd.mm.yy' is used.
 		 */
 		this.getItemDate = function(fieldName, format) {
 			// set default date format
