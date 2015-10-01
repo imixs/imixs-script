@@ -109,18 +109,15 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 								context: "#workitem_activities",
 								styleClass: "btn",
 								onclick: function(activity) {					
-									alert('huhu alles gut - click: ' + activity.getItem('txtname'));
-									
 									workitemController.pull();
 									
-							alert("txtsubject="+ workitemController.model.getItem('txtsubject'));		
-							//return false;		
-								//	workitemController.model
 									imixsWorkflow.processWorkitem({
 										workitem: workitemController.model,
 										activity: activity,
-										success: function() {
-											alert('process ok');
+										success: function(workitem) {
+											workitemController.model.item=workitem.item;
+											workitemController.push();
+											
 										},
 										error: function() {
 											alert('process failed');
@@ -168,72 +165,6 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		imixsUI.dateFormat='dd.mm.y';
 	};
 
-	/* Custom method to process a single workitem */
-	workitemController.xxxprocessWorkitem = function() {
-
-		imixsWorkflow.processWorkitem({
-			workitem:workitemController.model,
-			success : function(response) {
-				printLog(".", true);
-			},
-			error : function(workitem) {
-				workitemController.model=workitem;
-				var uniqueid = workitem.getItem('$uniqueid');
-				var error_code = workitem.getItem('$error_code');
-				var error_message = workitem.getItem('$error_message');
-
-				printLog("<br />" + uniqueid + " : " + error_code + " - "
-						+ error_message, true);
-
-				$("#error-message").text("BulkUpdate failed");
-				$("#imixs-error").show();
-			}
-		})
-		
-		
-		
-	};
-
-	/*xxxxxxxxxxxxxx Custom method to process a single workitem */
-	workitemController.xxxxxxxxxxxxprocessWorkitem = function(workitem) {
-
-		var xmlData = imixsXML.json2xml(workitem);
-		// console.debug(xmlData);
-		console.debug("process workitem: '" + workitem.getItem('$uniqueid')
-				+ "'...");
-
-		var url = "";
-		url = url + "/workflow/rest-service/workflow/workitem/";
-
-		$.ajax({
-			type : "POST",
-			url : url,
-			data : xmlData,
-			contentType : "text/xml",
-			dataType : "xml",
-			cache : false,
-			error : function(jqXHR, error, errorThrown) {
-				var message = errorThrown;
-				var json = imixsXML.xml2json(jqXHR.responseXML);
-				var workitem = new Workitem(json);
-				workitemController.model.item = json.entity.item;
-				var uniqueid = workitem.getItem('$uniqueid');
-				var error_code = workitem.getItem('$error_code');
-				var error_message = workitem.getItem('$error_message');
-
-				printLog("<br />" + uniqueid + " : " + error_code + " - "
-						+ error_message, true);
-
-				$("#error-message").text("BulkUpdate failed");
-				$("#imixs-error").show();
-			},
-			success : function(xml) {
-				printLog(".", true);
-			}
-		});
-
-	};
-
 	
 
 	/* Custom method to load a single workitem */
@@ -252,59 +183,19 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 		imixsWorkflow.loadWorkitem({
 			uniqueID: worklistController.model.selectedUniqueID,
-			success : function(response) {
-				console.debug(response);
-				workitemController.model.item = imixsXML.xml2entity(response);
+			success : function(workitem) {
+				workitemController.model.item = workitem.item;
 				workitemRoute.route();
-				// workitemController.push();
 			},
 			error : function(jqXHR, error, errorThrown) {
 				$("#error-message").text(errorThrown);
 				$("#imixs-error").show();
 			}
 		})
-		
 
 	}
 	
 	
-	
-	/* Custom method to load a single workitem */
-	workitemController.xxxloadWorkitem = function(context) {
-
-		// get workitem out of view model....
-		var entry = $(context).closest('[data-ben-entry]');
-		var entryNo = $(entry).attr("data-ben-entry");
-		var workitem = new imixs.ItemCollection(
-				worklistController.model.view[entryNo].item);
-		worklistController.model.selectedUniqueID = workitem
-				.getItem('$uniqueid');
-
-		console.debug("load workitem: '"
-				+ worklistController.model.selectedUniqueID + "'...");
-
-		var url = "";
-		url = url + "./rest-service/workflow/workitem/"
-				+ worklistController.model.selectedUniqueID;
-
-		$.ajax({
-			type : "GET",
-			url : url,
-			dataType : "xml",
-			success : function(response) {
-				console.debug(response);
-				workitemController.model.item = imixsXML.xml2entity(response);
-				workitemRoute.route();
-				// workitemController.push();
-			},
-			error : function(jqXHR, error, errorThrown) {
-				$("#error-message").text(errorThrown);
-				$("#imixs-error").show();
-			}
-		});
-
-	}
-
 	/*
 	 * Custom method to load a workList. The method loads only a subset of
 	 * attributes defined by the query param 'items'

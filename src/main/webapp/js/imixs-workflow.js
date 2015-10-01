@@ -51,7 +51,8 @@ IMIXS.org.imixs.workflow = (function() {
 	},
 
 	/**
-	 * Custom method to load a single workitem from the service base URL
+	 * The method loads a single workitem from the service base URL.
+	 * 
 	 */
 	loadWorkitem = function(options) {
 		var d = this.serviceURL;
@@ -65,19 +66,28 @@ IMIXS.org.imixs.workflow = (function() {
 			type : "GET",
 			url : url,
 			dataType : "xml",
-			success : options.success,
+			success : function(response) {
+				var entity = imixsXML.xml2entity(response);
+				options.success(new imixs.ItemCollection(entity));
+			},
 			error : options.error
 		});
 
 	},
 
-	/* Custom method to process a single workitem */
+	/**
+	 * This method process an workitem. After successful processing the method
+	 * returns the updates workitem (ItemCollection).
+	 * In case of an processing error the method returns the workiem with 
+	 * the attributes '$error_code' and '$error_message'
+	 */
 	processWorkitem = function(options) {
 		var url = getServiceURL();
-		
+
 		if (options.activity) {
 			// update $activityid
-			options.workitem.setItem("$activityid", options.activity.getItem("numactivityid"),"xs:int"); 
+			options.workitem.setItem("$activityid", options.activity
+					.getItem("numactivityid"), "xs:int");
 		}
 
 		var xmlData = imixsXML.json2xml(options.workitem);
@@ -97,7 +107,7 @@ IMIXS.org.imixs.workflow = (function() {
 			error : function(jqXHR, error, errorThrown) {
 				var message = errorThrown;
 				var json = imixsXML.xml2json(jqXHR.responseXML);
-				var workitem = new imixsXML.ItemCollection(json);
+				var workitem = new imixs.ItemCollection(json);
 				var uniqueid = workitem.getItem('$uniqueid');
 				var error_code = workitem.getItem('$error_code');
 				var error_message = workitem.getItem('$error_message');
@@ -106,7 +116,11 @@ IMIXS.org.imixs.workflow = (function() {
 
 				options.error(workitem);
 			},
-			success : options.success
+			success : function(response) {
+				// return processed workitem
+				var entity = imixsXML.xml2entity(response);
+				options.success(new imixs.ItemCollection(entity));
+			}
 		});
 
 	},
