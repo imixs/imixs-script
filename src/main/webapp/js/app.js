@@ -21,7 +21,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		console.error("ERROR - missing dependency: imixs-workflow.js");
 	}
 
-	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml, imixsUI = IMIXS.org.imixs.ui,  imixsWorkflow = IMIXS.org.imixs.workflow,
+	var benJS = BENJS.org.benjs.core, imixs = IMIXS.org.imixs.core, imixsXML = IMIXS.org.imixs.xml, imixsUI = IMIXS.org.imixs.ui, imixsWorkflow = IMIXS.org.imixs.workflow,
 	/***************************************************************************
 	 * 
 	 * MODELS
@@ -89,54 +89,61 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		}
 	}),
 
-	workitemRoute = benJS.createRoute({
-		id : "workitem-route",
-		templates : {
-			"content" : "view_workitem.html"
-		},
-		afterRoute : function(router) {
-			$("#imixs-nav ul li").removeClass('active');
-			$("#imixs-nav ul li:nth-child(2)").addClass('active');
-			
-			// update activities
-			imixsWorkflow.loadActivities({
-				workitem:workitemController.model,
-				success : function(activities) {
-					
-					console.debug( "found " + activities.length + " activities :-)");
-					imixsUI.renderActivities({
-								activities: activities,
-								context: "#workitem_activities",
-								styleClass: "btn",
-								onclick: function(activity) {					
-									workitemController.pull();
-									
-									imixsWorkflow.processWorkitem({
-										workitem: workitemController.model,
-										activity: activity,
-										success: function(workitem) {
-											workitemController.model.item=workitem.item;
-											workitemController.push();
-											
-										},
-										error: function() {
-											alert('process failed');
-										}
-									});
-									
-								}
-					});
-					
-					$("#workitem_activities").imixsLayout();
-					
+	workitemRoute = benJS
+			.createRoute({
+				id : "workitem-route",
+				templates : {
+					"content" : "view_workitem.html"
 				},
-				error: function(activityList) {					
-					$("#workitem_activities").empty();
+				afterRoute : function(router) {
+					$("#imixs-nav ul li").removeClass('active');
+					$("#imixs-nav ul li:nth-child(2)").addClass('active');
+
+					// update activities
+					imixsWorkflow
+							.loadActivities({
+								workitem : workitemController.model,
+								success : function(activities) {
+
+									console.debug("found " + activities.length
+											+ " activities :-)");
+									imixsUI
+											.renderActivities({
+												activities : activities,
+												context : "#workitem_activities",
+												styleClass : "btn",
+												onclick : function(activity) {
+													workitemController.pull();
+
+													imixsWorkflow
+															.processWorkitem({
+																workitem : workitemController.model,
+																activity : activity,
+																success : function(
+																		workitem) {
+																	workitemController.model.item = workitem.item;
+																	workitemController
+																			.push();
+
+																},
+																error : function() {
+																	alert('process failed');
+																}
+															});
+
+												}
+											});
+
+									$("#workitem_activities").imixsLayout();
+
+								},
+								error : function(activityList) {
+									$("#workitem_activities").empty();
+								}
+							});
+
 				}
-			 });
-			
-		}
-	}),
+			}),
 
 	contentTemplate = benJS.createTemplate({
 		id : "content",
@@ -148,10 +155,9 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	 */
 	start = function() {
 		console.debug("starting application...");
-		
-		// init service base URL
-		imixsWorkflow.serviceURL="/imixs-script/rest-service";
 
+		// init service base URL
+		imixsWorkflow.serviceURL = "/imixs-script/rest-service";
 
 		// start view
 		benJS.start({
@@ -160,12 +166,10 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 		worklistRoute.route();
 		$("#imixs-error").hide();
-		
-		// set default date format
-		imixsUI.dateFormat='dd.mm.y';
-	};
 
-	
+		// set default date format
+		imixsUI.dateFormat = 'dd.mm.y';
+	};
 
 	/* Custom method to load a single workitem */
 	workitemController.loadWorkitem = function(context) {
@@ -178,11 +182,8 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		worklistController.model.selectedUniqueID = workitem
 				.getItem('$uniqueid');
 
-		console.debug("load workitem: '"
-				+ worklistController.model.selectedUniqueID + "'...");
-
 		imixsWorkflow.loadWorkitem({
-			uniqueID: worklistController.model.selectedUniqueID,
+			uniqueID : worklistController.model.selectedUniqueID,
 			success : function(workitem) {
 				workitemController.model.item = workitem.item;
 				workitemRoute.route();
@@ -194,13 +195,39 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		})
 
 	}
-	
-	
+
+	/*
+	 * Loads the workList. The method loads only a subset of attributes defined
+	 * by the query param 'items'
+	 */
+	worklistController.loadWorklist = function() {
+		worklistController.pull();
+
+		imixsWorkflow.loadWorklist({
+			service : "/workflow/worklist",
+			sortorder : 2,
+			start : worklistController.model.start,
+			count : worklistController.model.count,
+			items : [ '$uniqueid', 'txtworkflowsummary', '$creator','txtname',
+						'$modified', 'txtworkflowstatus', 'namcurrenteditor' ],
+			success : function(entities) {
+				worklistController.model.view = entities;
+				// push content
+				worklistController.push();
+			},
+			error : function(jqXHR, error, errorThrown) {
+				$("#error-message").text(errorThrown);
+				$("#imixs-error").show();
+			}
+		});
+
+	}
+
 	/*
 	 * Custom method to load a workList. The method loads only a subset of
 	 * attributes defined by the query param 'items'
 	 */
-	worklistController.loadWorklist = function() {
+	worklistController.xxxloadWorklist = function() {
 		worklistController.pull();
 		console.debug("load worklist: '" + worklistController.model.query
 				+ "'...");
@@ -228,26 +255,21 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		});
 
 	}
-	
-	
-	
-	
+
 	// public API
 	return {
 		Workitem : Workitem,
 		worklistController : worklistController,
 		workitemController : workitemController,
 		worklistRoute : worklistRoute,
-		//imixsUI: imixsUI,
+		// imixsUI: imixsUI,
 		start : start
 	};
 
 }());
 
-
 function layoutSection(templ, context) {
-	
-		
+
 	// $(context).i18n();
 	$("#imixs-error").hide();
 
@@ -256,9 +278,8 @@ function layoutSection(templ, context) {
 
 	// layout tinymce
 	$('textarea.imixs-editor').tinymce({
-		// options
+	// options
 	});
 
-	
 };
 

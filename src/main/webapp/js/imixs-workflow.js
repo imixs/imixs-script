@@ -55,14 +55,10 @@ IMIXS.org.imixs.workflow = (function() {
 	 * 
 	 */
 	loadWorkitem = function(options) {
-		var d = this.serviceURL;
-		var e = serviceURL;
-
 		var url = getServiceURL();
 
 		url = url + "workflow/workitem/" + options.uniqueID;
-
-		$.ajax({
+ 		$.ajax({
 			type : "GET",
 			url : url,
 			dataType : "xml",
@@ -76,10 +72,60 @@ IMIXS.org.imixs.workflow = (function() {
 	},
 
 	/**
+	 * The method loads a list of workitems from a given service URL.
+	 * 
+	 * option params:  service, count, start, items, sortorder
+	 * 
+	 */
+	loadWorklist = function(options) {
+		var items,url;
+		
+		url = getServiceURL();
+		if (options.service.charAt(0) == '/') {
+			options.service = options.service.substring(1);
+		} 
+		
+		url = url + options.service;
+		
+		if (url.indexOf('?')==-1) {
+			url=url+'?_';
+		}
+		if (isFinite(options.start)) {
+			url=url+"&start="+options.start; 
+		}
+		if (isFinite(options.count)) {
+			url=url+"&count="+options.count;
+		}
+		if (isFinite(options.sortorder)) {
+			url=url+"&sortorder="+options.sortorder;
+		}
+		if (options.items) {
+			items=options.items;
+			if (!$.isArray(items)) {
+				items = $.makeArray( items );
+			}
+			url=url+="&items=";
+			$.each(items, function(index, aitem) {
+				url=url+aitem+",";
+			});
+		}
+		
+		$.ajax({
+			type : "GET",
+			url : url,
+			dataType : "xml",
+			success : function(response) {
+				options.success(imixsXML.xml2collection(response));
+			},
+			error : options.error
+		});
+	},
+
+	/**
 	 * This method process an workitem. After successful processing the method
-	 * returns the updates workitem (ItemCollection).
-	 * In case of an processing error the method returns the workiem with 
-	 * the attributes '$error_code' and '$error_message'
+	 * returns the updates workitem (ItemCollection). In case of an processing
+	 * error the method returns the workiem with the attributes '$error_code'
+	 * and '$error_message'
 	 */
 	processWorkitem = function(options) {
 		var url = getServiceURL();
@@ -184,6 +230,7 @@ IMIXS.org.imixs.workflow = (function() {
 	return {
 		serviceURL : serviceURL,
 		loadWorkitem : loadWorkitem,
+		loadWorklist : loadWorklist,
 		processWorkitem : processWorkitem,
 		loadActivities : loadActivities
 	};
