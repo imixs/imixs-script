@@ -71,12 +71,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 				id : "workitemController",
 				model : new Workitem(),
 				afterPull : function(controller, context) {
-					// convert imixs-date objects....
-					console.log('mach was');
-
-					// validate xs:dateTime values
 					// convert date objects into ISO 8601 format
-
 					$.each(
 							controller.model.item,
 							function(index, aitem) {
@@ -86,38 +81,18 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 
 									if (dateString
 											.match(/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))?$/)) {
-										console.log('alles gut');
+										// no op 
 									} else {
-
 										// test if Date object....
-										// dateTest=new
-										// Date("2015-10-09T15:15:06+00:00");
-										//					
 										var dateObject = $.datepicker
 												.parseDate(
 														IMIXS.org.imixs.ui.dateFormat,
 														dateString);
-
-										// jetzt ins iso format
-										// übersetzen
-
-										var neuding = $.datepicker
+										var dateObjectISO = $.datepicker
 												.formatDate("yy-mm-dd",
 														dateObject);
-										
-									//	neuding=neuding+"T00:00:00+01:00";
-//										
-//										neuding="2015-10-10T17:00:32.329+02:00";
-
 										controller.model.setItem(
-												aitem.name, neuding,"xs:dateTime");
-										
-										
-//										controller.model.setItem(
-//												aitem.name, neuding,"xs:string");
-//										
-										
-										
+												aitem.name, dateObjectISO,"xs:dateTime");
 										console.log('fertig',controller.model);
 									}
 								}
