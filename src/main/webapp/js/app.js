@@ -66,10 +66,65 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		model : new Worklist()
 	}),
 
-	workitemController = benJS.createController({
-		id : "workitemController",
-		model : new Workitem()
-	}),
+	workitemController = benJS
+			.createController({
+				id : "workitemController",
+				model : new Workitem(),
+				afterPull : function(controller, context) {
+					// convert imixs-date objects....
+					console.log('mach was');
+
+					// validate xs:dateTime values
+					// convert date objects into ISO 8601 format
+
+					$.each(
+							controller.model.item,
+							function(index, aitem) {
+								if (aitem && aitem.value && aitem.value[0]
+										&& aitem.value[0]['xsi:type'] === "xs:dateTime") {
+									var dateString = aitem.value[0]['$'];
+
+									if (dateString
+											.match(/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))?$/)) {
+										console.log('alles gut');
+									} else {
+
+										// test if Date object....
+										// dateTest=new
+										// Date("2015-10-09T15:15:06+00:00");
+										//					
+										var dateObject = $.datepicker
+												.parseDate(
+														IMIXS.org.imixs.ui.dateFormat,
+														dateString);
+
+										// jetzt ins iso format
+										// übersetzen
+
+										var neuding = $.datepicker
+												.formatDate("yy-mm-dd",
+														dateObject);
+										
+									//	neuding=neuding+"T00:00:00+01:00";
+//										
+//										neuding="2015-10-10T17:00:32.329+02:00";
+
+										controller.model.setItem(
+												aitem.name, neuding,"xs:dateTime");
+										
+										
+//										controller.model.setItem(
+//												aitem.name, neuding,"xs:string");
+//										
+										
+										
+										console.log('fertig',controller.model);
+									}
+								}
+							});
+
+				}
+			}),
 
 	/***************************************************************************
 	 * 
@@ -168,7 +223,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		$("#imixs-error").hide();
 
 		// set default date format
-		imixsUI.dateFormat = 'dd.mm.y';
+		imixsUI.dateFormat = 'dd.mm.yy';
 	};
 
 	/* Custom method to load a single workitem */
@@ -208,43 +263,10 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 			sortorder : 2,
 			start : worklistController.model.start,
 			count : worklistController.model.count,
-			items : [ '$uniqueid', 'txtworkflowsummary', '$creator','txtname',
-						'$modified', 'txtworkflowstatus', 'namcurrenteditor' ],
+			items : [ '$uniqueid', 'txtworkflowsummary', '$creator', 'txtname',
+					'$modified', 'txtworkflowstatus', 'namcurrenteditor' ],
 			success : function(entities) {
 				worklistController.model.view = entities;
-				// push content
-				worklistController.push();
-			},
-			error : function(jqXHR, error, errorThrown) {
-				$("#error-message").text(errorThrown);
-				$("#imixs-error").show();
-			}
-		});
-
-	}
-
-	/*
-	 * Custom method to load a workList. The method loads only a subset of
-	 * attributes defined by the query param 'items'
-	 */
-	worklistController.xxxloadWorklist = function() {
-		worklistController.pull();
-		console.debug("load worklist: '" + worklistController.model.query
-				+ "'...");
-
-		var items = "&sortorder=2&items=$uniqueid,txtworkflowsummary,$creator,$modified,txtworkflowstatus,namcurrenteditor"
-		var url = "./rest-service";
-		url = url + "/workflow/worklist/";
-		url = url + "?start=" + worklistController.model.start + "&count="
-				+ worklistController.model.count + items;
-
-		$.ajax({
-			type : "GET",
-			url : url,
-			dataType : "xml",
-			success : function(response) {
-				worklistController.model.view = imixsXML
-						.xml2collection(response);
 				// push content
 				worklistController.push();
 			},

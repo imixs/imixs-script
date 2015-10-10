@@ -1,9 +1,7 @@
 <div class="row">
-
-		<h1>Workitem:</h1>
-
 	<div data-ben-controller="workitemController">
 
+		<h1 data-ben-model="getItem('txtworkflowgroup')"></h1>
 
 		<!-- Error message -->
 		<div id="imixs-error" style="">
@@ -17,49 +15,55 @@
 		</div>
 
 
-			<!-- **** General info ***** -->
-			
-Version : <span data-ben-model="getItem('$version')"></span>			
-			
-	<dl>
-		<dt>Subject:
-		</dt>
-		<dd style="width: 400px;">
-		<input type="text" data-ben-model="getItem('txtsubject')" />
-		
-			
-		</dd>
-
-		<dt>
-			Date:
-		</dt>
-		<dd>
-			<input type="text" class="imixs-date" data-ben-model="getItemDate('datdate')" />
-		</dd>
-
-		<dt>Team:
-		</dt>
-		<dd>
-			xxx
-		</dd>
+		<!-- **** General info ***** -->
 
 
-		<dt>Details</dt>
-		<dd>
-		<textarea class="imixs-editor" data-ben-model="getItem('htmlabstract')"></textarea>
-			
-		</dd>
-	</dl>
+
+		<dl>
+			<dt>Subject:</dt>
+			<dd style="width: 400px;">
+				<input type="text" data-ben-model="getItem('txtsubject')" />
+
+
+			</dd>
+
+			<dt>Date:</dt>
+			<dd>
+				<input type="text" class="imixs-date"
+					data-ben-model="getItem('datdate')" />
+			</dd>
+
+			<dt>Team:</dt>
+			<dd>xxx</dd>
+
+
+			<dt>Details</dt>
+			<dd>
+				<textarea class="imixs-editor"
+					data-ben-model="getItem('htmlabstract')"></textarea>
+
+			</dd>
+		</dl>
+
+
+		<div class="imixs-form-section">
+			<!-- activity buttons -->
+			<span id="workitem_activities"></span> <input type="button"
+				value="Close" onclick="app.worklistRoute.route()" class="btn" />
+
+		</div>
+
+
+		<!-- technical data -->
+		<div class="imixs-techdata">
+			$uniqueid:<span data-ben-model="getItem('$uniqueid')"></span> <br />
+			$modelversion: <span data-ben-model="getItem('$modelversion')"></span><br />
+			$processid: <span data-ben-model="getItem('$processid')"></span><br />
+			JPA-Version: <span data-ben-model="getItem('$version')"></span><br />
+
+		</div>
+
 	</div>
-
-	<div class="imixs-form-section">
-		<!-- activity buttons -->
-		<span id="workitem_activities"></span>
-		<input type="button" value="Close" onclick="app.worklistRoute.route()"
-				class="btn" />
-		
-	</div>
-
 </div>
 
 

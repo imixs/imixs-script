@@ -1,13 +1,7 @@
 <div class="row imixs-view">
 
-	
-
-
-
-	<h1>Worklist:</h1>
+	<h1>Task List</h1>
 	<div data-ben-controller="worklistController">
-
-		
 
 		<!-- Error message -->
 		<div id="imixs-error" style="">
@@ -20,9 +14,7 @@
 			</div>
 		</div>
 
-
 		<!--  Result list -->
-
 		<div>
 			<table>
 				<thead>
@@ -35,23 +27,24 @@
 				<tbody data-ben-foreach="view as app.Workitem">
 					<tr>
 						<td><a href="javascript:;"
-							onclick="app.workitemController.loadWorkitem(this)">
-								<span data-ben-model="getSummary()" />								
+							onclick="app.workitemController.loadWorkitem(this)"> <span
+								data-ben-model="getSummary()" />
 						</a></td>
-						
-
-						<td><span data-ben-model="getItemDate('$modified','dd. MM yy')" /> by <span
+						<td><span
+							data-ben-model="getItemDate('$modified','dd. MM yy')" /> by <span
 							data-ben-model="getItem('namcurrenteditor')"></span></td>
-
-					
 						<td><span data-ben-model="getItem('txtworkflowstatus')" /></td>
-
-						
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
+
+		<div class="imixs-form-section">
+			<input type="button" value="Create Ticket"
+				onclick="app.worklistRoute.route()" class="btn" />
+
+		</div>
 	</div>
 </div>
 

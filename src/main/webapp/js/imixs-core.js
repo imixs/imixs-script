@@ -111,13 +111,6 @@ IMIXS.org.imixs.core = (function() {
 
 			var resultKey = -1;
 
-			// $.each(this.item, function(index, aitem) {
-			// if (aitem && aitem.name == fieldName) {
-			// resultKey = index;
-			// return false;
-			// }
-			// });
-
 			resultKey = this.findItem(fieldName);
 
 			// check if field exists?
@@ -173,7 +166,7 @@ IMIXS.org.imixs.core = (function() {
 		 * formats a date output.
 		 * 
 		 * The method accepts a format parameter to format the date output. If
-		 * no format is defined the method test is the imixs.ui library is
+		 * no format is defined the method test if the imixs.ui library is
 		 * available. If not the default output format 'dd.mm.yy' is used.
 		 */
 		this.getItemDate = function(fieldName, format) {
@@ -187,7 +180,11 @@ IMIXS.org.imixs.core = (function() {
 				}
 			}
 			var value = this.getItem(fieldName);
-			return $.datepicker.formatDate(format, new Date(value));
+			if (value) {
+				return $.datepicker.formatDate(format, new Date(value));
+			} else {
+				return "";
+			}
 		}
 
 		/**

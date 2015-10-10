@@ -39,7 +39,7 @@ IMIXS.org.imixs.ui = (function() {
 	var imixs = IMIXS.org.imixs.core,
 
 	// default jQuery date format
-	dateFormat = "dd.mm.y",
+	dateFormat = "dd.mm.yy",
 
 	/**
 	 * The method appends for each activity entity an action button. The method
@@ -56,15 +56,15 @@ IMIXS.org.imixs.ui = (function() {
 			var testPublicResult = activity.getItem("keypublicresult");
 			if ("0" != testPublicResult) {
 				renderActionButton({
-					activity:activity,
+					activity : activity,
 					context : options.context,
 					insert : false,
 					styleClass : options.styleClass,
-					onclick: options.onclick
+					onclick : options.onclick
 				});
 
 			}
-		
+
 		});
 	},
 
@@ -76,15 +76,14 @@ IMIXS.org.imixs.ui = (function() {
 	 * context, activity, insert, styleClass, onclick
 	 */
 	renderActionButton = function(options) {
-		
+
 		var actionName = options.activity.getItem('txtname');
 		var actionID = options.activity.getItem('numactivityid');
 		var tooltipText = options.activity.getItem('rtfdescription');
 
-		
 		// build conclick event....
-//		var _activityScript = "onclick=\"processWorkitem('" + options.id
-//				+ "');";
+		// var _activityScript = "onclick=\"processWorkitem('" + options.id
+		// + "');";
 
 		// build tooltip span tag
 		var _tooltip = "";
@@ -94,25 +93,20 @@ IMIXS.org.imixs.ui = (function() {
 
 		var _button = "<input type=\"submit\" class=\"" + options.styleClass
 				+ "\" id=\"workflow_activity_" + actionID + "\" value=\""
-				+ actionName + "\" " 
-				+ "\" title=\"\"></input>" + _tooltip;
-		
-		var jQueryButton=$.parseHTML(_button);
-		$(jQueryButton).click(
-				function(event) {
-					//alert('huhu click: ' + options.activity.getItem('txtname'));
-					options.onclick(options.activity)
-				});
-		
+				+ actionName + "\" " + "\" title=\"\"></input>" + _tooltip;
+
+		var jQueryButton = $.parseHTML(_button);
+		$(jQueryButton).click(function(event) {
+			// alert('huhu click: ' + options.activity.getItem('txtname'));
+			options.onclick(options.activity)
+		});
+
 		// insert at the beginning of the tag?
 		if (options.insert)
 			$(options.context).prepend(jQueryButton);
 		else
 			$(options.context).append(jQueryButton);
 
-		
-		
-		
 	}
 
 	// public API
@@ -240,8 +234,21 @@ $.fn.imixsLayout = function(options) {
 
 		$(".imixs-tabs", this).tabs();
 
-		// regional : 'de'
-		$(".imixs-date", this).datepicker({
+		// The following code adds a jquery datepicker object
+		// to each input field with class 'imixs-date'.
+		// the method tests the date format before the datepicker is added.
+		// expected date format is xs:Date ISO 8601 '2015-10-01T00:00:00+02:00'
+		$(".imixs-date").each(
+				function(index) {
+					sDateString = $(this).val();
+					if (sDateString.indexOf('T') == 10) {
+						// try to format
+						sDateString = $.datepicker.formatDate(
+								IMIXS.org.imixs.ui.dateFormat, new Date(
+										sDateString));
+						$(this).val(sDateString);
+					}
+				}).datepicker({
 			showOtherMonths : true,
 			selectOtherMonths : true,
 			dateFormat : IMIXS.org.imixs.ui.dateFormat

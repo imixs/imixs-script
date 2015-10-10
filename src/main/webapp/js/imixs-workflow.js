@@ -130,12 +130,14 @@ IMIXS.org.imixs.workflow = (function() {
 	processWorkitem = function(options) {
 		var url = getServiceURL();
 
+		// update $activityid
 		if (options.activity) {
-			// update $activityid
 			options.workitem.setItem("$activityid", options.activity
 					.getItem("numactivityid"), "xs:int");
 		}
 
+		
+		
 		var xmlData = imixsXML.json2xml(options.workitem);
 		// console.debug(xmlData);
 		console.debug("process workitem: '"

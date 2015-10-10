@@ -69,7 +69,7 @@ IMIXS.org.imixs.xml = (function() {
 	 * 
 	 * </code>
 	 */
-			xml2json = function(xml) {
+	xml2json = function(xml) {
 				// Create the return object
 				var obj = {};
 

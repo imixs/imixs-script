@@ -278,7 +278,13 @@ dd textarea {
 	margin: 0.2em;
 }
 
-
+.imixs-techdata {
+	margin-top:60px;
+	font-size:0.8em;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	
+}
 .imixs-date {
     width: 120px !important;
     background: url(calendar.png) no-repeat scroll left center white;
