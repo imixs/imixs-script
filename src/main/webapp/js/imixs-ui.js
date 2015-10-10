@@ -41,6 +41,41 @@ IMIXS.org.imixs.ui = (function() {
 	// default jQuery date format
 	dateFormat = "dd.mm.yy",
 
+	
+	/**
+	 * This method validates all items of xsi:type=dateTime and 
+	 * converts input valus into ISO 8601 format for xml processing
+	 * 
+	 * The method expects a Imixs ItemCollection containing all item values
+	 *   
+	 */
+	convertDateTimeInput = function(itemCollection) {
+		// convert date objects into ISO 8601 format
+		$.each(itemCollection.item,
+				function(index, aitem) {
+					// test if item is of type xs:dateTime
+					if (aitem && aitem.value && aitem.value[0]
+							&& aitem.value[0]['xsi:type'] === "xs:dateTime") {
+						var dateString = aitem.value[0]['$'];
+
+						// test if string matches ISO 8601 format
+						if (!dateString
+								.match(/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))?$/)) {
+							// test if Date object....
+							var dateObject = $.datepicker
+									.parseDate(
+											IMIXS.org.imixs.ui.dateFormat,
+											dateString);
+							var dateObjectISO = $.datepicker
+									.formatDate("yy-mm-dd",
+											dateObject);
+							itemCollection.setItem(
+									aitem.name, dateObjectISO,"xs:dateTime");
+						}
+					}
+				});
+	},
+	
 	/**
 	 * The method appends for each activity entity an action button. The method
 	 * did not add activity buttons with the activityEntity property
@@ -76,14 +111,9 @@ IMIXS.org.imixs.ui = (function() {
 	 * context, activity, insert, styleClass, onclick
 	 */
 	renderActionButton = function(options) {
-
 		var actionName = options.activity.getItem('txtname');
 		var actionID = options.activity.getItem('numactivityid');
 		var tooltipText = options.activity.getItem('rtfdescription');
-
-		// build conclick event....
-		// var _activityScript = "onclick=\"processWorkitem('" + options.id
-		// + "');";
 
 		// build tooltip span tag
 		var _tooltip = "";
@@ -97,8 +127,9 @@ IMIXS.org.imixs.ui = (function() {
 
 		var jQueryButton = $.parseHTML(_button);
 		$(jQueryButton).click(function(event) {
-			// alert('huhu click: ' + options.activity.getItem('txtname'));
-			options.onclick(options.activity)
+			options.onclick(options.activity);
+			// leave focus
+			this.blur();
 		});
 
 		// insert at the beginning of the tag?
@@ -112,6 +143,7 @@ IMIXS.org.imixs.ui = (function() {
 	// public API
 	return {
 		dateFormat : dateFormat,
+		convertDateTimeInput : convertDateTimeInput,
 		renderActivities : renderActivities
 	};
 
@@ -194,6 +226,8 @@ function setDateTimeInput(datetimepicker) {
 
 }
 
+
+
 /*
  * adds the minute options to the time-picker minute combobox depending on the
  * first two options. The second option indicates the interval
@@ -237,7 +271,7 @@ $.fn.imixsLayout = function(options) {
 		// The following code adds a jquery datepicker object
 		// to each input field with class 'imixs-date'.
 		// the method tests the date format before the datepicker is added.
-		// expected date format is xs:Date ISO 8601 '2015-10-01T00:00:00+02:00'
+		// expected date format is xs:DateTime ISO 8601 e.g. '2015-10-01T00:00:00+02:00'
 		$(".imixs-date").each(
 				function(index) {
 					sDateString = $(this).val();

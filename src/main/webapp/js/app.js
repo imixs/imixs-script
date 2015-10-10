@@ -72,32 +72,12 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 				model : new Workitem(),
 				afterPull : function(controller, context) {
 					// convert date objects into ISO 8601 format
-					$.each(
-							controller.model.item,
-							function(index, aitem) {
-								if (aitem && aitem.value && aitem.value[0]
-										&& aitem.value[0]['xsi:type'] === "xs:dateTime") {
-									var dateString = aitem.value[0]['$'];
-
-									if (dateString
-											.match(/^(\d{4}\-\d\d\-\d\d([tT][\d:\.]*)?)([zZ]|([+\-])(\d\d):?(\d\d))?$/)) {
-										// no op 
-									} else {
-										// test if Date object....
-										var dateObject = $.datepicker
-												.parseDate(
-														IMIXS.org.imixs.ui.dateFormat,
-														dateString);
-										var dateObjectISO = $.datepicker
-												.formatDate("yy-mm-dd",
-														dateObject);
-										controller.model.setItem(
-												aitem.name, dateObjectISO,"xs:dateTime");
-										console.log('fertig',controller.model);
-									}
-								}
-							});
-
+			 		imixsUI.convertDateTimeInput(controller.model);
+			
+				},
+				afterPush : function(controller, context) {
+					// jquery-ui
+					$(context).imixsLayout();
 				}
 			}),
 
@@ -142,7 +122,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 												activities : activities,
 												context : "#workitem_activities",
 												styleClass : "btn",
-												onclick : function(activity) {
+												onclick : function(activity) { 													
 													workitemController.pull();
 
 													imixsWorkflow
@@ -152,15 +132,12 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 																success : function(
 																		workitem) {
 																	workitemController.model.item = workitem.item;
-																	workitemController
-																			.push();
-
+																	workitemController.push();
 																},
 																error : function() {
 																	alert('process failed');
 																}
 															});
-
 												}
 											});
 
@@ -254,13 +231,11 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	}
 
 	// public API
-	return {
+	return { 
 		Workitem : Workitem,
-		worklistController : worklistController,
 		workitemController : workitemController,
-		worklistRoute : worklistRoute,
-		// imixsUI: imixsUI,
-		start : start
+ 		worklistRoute : worklistRoute,
+ 		start : start
 	};
 
 }());
@@ -279,4 +254,22 @@ function layoutSection(templ, context) {
 	});
 
 };
+
+var app = IMIXS.org.imixs.workflow.sample.app;
+ 
+$(document).ready(function() {
+	// add ajax waiting feature
+	var $body = $("body");
+	$(document).on({
+		ajaxStart : function() {
+			$body.addClass("loading");
+		},
+		ajaxStop : function() {
+			$body.removeClass("loading");
+		}
+	});
+	// start sample application
+	app.start();
+
+});
 
