@@ -48,11 +48,11 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		imixs.ItemCollection.call(this, itemarray);
 		this.id = '';
  
-		/* return summary or txtname */
+		/* Example computed value: return summary or subject */
 		this.getSummary = function() {
 			var val = this.getItem("txtworkflowsummary");
 			if (!val)
-				val = this.getItem("txtsubject");
+				val = this.getItem("subject");
 			if (!val)
 				val = " - no title - ";
 			return val;
@@ -189,7 +189,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 			start : worklistController.model.start,
 			count : worklistController.model.count,
 			items : [ '$uniqueid', 'txtworkflowsummary', '$creator', 'txtsubject',
-					'$modified', 'txtworkflowstatus', 'namcurrenteditor' ],
+					'$modified', 'txtworkflowstatus', 'namcurrenteditor', 'namowner' ],
 			success : function(entities) {
 				worklistController.model.view = entities;
 				// push content

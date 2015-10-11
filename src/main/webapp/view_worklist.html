@@ -20,6 +20,7 @@
 				<thead>
 					<tr>
 						<th>Summary</th>
+						<th>Owner</th>
 						<th>Modified</th>
 						<th>Status</th>
 					</tr>
@@ -30,6 +31,11 @@
 							onclick="app.workitemController.loadWorkitem(this)"> <span
 								data-ben-model="getSummary()" />
 						</a></td>
+
+						<!-- print all owners -->
+						<td data-ben-foreach="getItemList('namowner')"><span
+							data-ben-model="."></span><br /></td>
+
 						<td><span
 							data-ben-model="getItemDate('$modified','dd. MM yy')" /> by <span
 							data-ben-model="getItem('namcurrenteditor')"></span></td>

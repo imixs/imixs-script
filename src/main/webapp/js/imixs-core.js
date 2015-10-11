@@ -101,8 +101,8 @@ IMIXS.org.imixs.core = (function() {
 		}
 
 		/**
-		 * This method is used to return the value array of a name item inside
-		 * the current ItemCollection. If no item with this name exists the
+		 * This method is used to return the first value of an item with the given name
+		 * inside the current ItemCollection. If no item with this name exists the
 		 * method adds a new element with this name.
 		 */
 		this.getItem = function(fieldName) {
@@ -137,6 +137,52 @@ IMIXS.org.imixs.core = (function() {
 				return "";
 
 		}
+		
+		
+		/**
+		 * This method is used to return the value array of a name item inside
+		 * the current ItemCollection. If no item with this name exists the
+		 * method adds a new element with this name.
+		 */
+		this.getItemList = function(fieldName) {
+			if (!this.item)
+				return "";
+
+			var resultKey = -1;
+
+			resultKey = this.findItem(fieldName);
+
+			// check if field exists?
+			if (resultKey == -1) {
+				// create a new element
+				valueObj = {
+					"name" : fieldName,
+					"value" : [ {
+						"xsi:type" : "xs:string",
+						"$" : ""
+					} ]
+				};
+				this.item.push(valueObj);
+				resultKey = this.item.length - 1;
+			}
+
+			var valueListObj = this.item[resultKey].value;
+			var valueList = new Array();
+			if (valueListObj) {
+				// extract values...
+				$.each(valueListObj, function(index, valueObj) {
+					if (typeof (valueObj['$']) == "undefined")
+						valueList.push( valueObj);
+					else
+						valueList.push( valueObj['$']);
+					
+				});
+			}
+	
+			return valueList;
+
+		}
+		
 
 		/**
 		 * Adds a new item into the collection
