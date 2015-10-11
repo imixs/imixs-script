@@ -162,11 +162,10 @@ IMIXS.org.imixs.xml = (function() {
 								result = result + '<value xsi:type="'
 										+ avalue["xsi:type"] + '">';
 								/*  
-								 * in case of XML or HTML we embed the
+								 * in case of xsi:type==xs:string we embed the
 								 * value into a CDATA element
 								 */
-								if (avalue["$"]
-										&& avalue["$"].trim().match("^<")) {
+								if (avalue["xsi:type"]==="xs:string") {
 									result = result + "<![CDATA[" + avalue["$"]
 											+ "]]>";
 								} else {
