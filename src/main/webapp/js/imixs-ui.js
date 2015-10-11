@@ -34,10 +34,14 @@ IMIXS.org.imixs.ui = (function() {
 	if (!IMIXS.org.imixs.core) {
 		console.error("ERROR - missing dependency: imixs-core.js");
 	}
+	if (!IMIXS.org.imixs.workflow) {
+		console.error("ERROR - missing dependency: imixs-workflow.js");
+	}
 
 	// private properties
-	var imixs = IMIXS.org.imixs.core,
-
+	var imixs = IMIXS.org.imixs.core, 
+		imixsWorkflow = IMIXS.org.imixs.workflow,
+ 
 	// default jQuery date format
 	dateFormat = "dd.mm.yy",
 
@@ -76,6 +80,57 @@ IMIXS.org.imixs.ui = (function() {
 				});
 	},
 	
+	
+	/**
+	 * This method creates an action bar with an action button 
+	 * for each activity for a given workitem. 
+	 * 
+	 * @param: options - workitem, context, stleclass, onclick, onsuccess, onerror
+	 */
+	layoutActivities = function(options) {
+		
+		// clear context first
+		$( options.context).empty();
+		
+		// now load all activitis for the given workitem
+		imixsWorkflow.loadActivities({
+			workitem : options.workitem,
+			success : function(activities) {
+				renderActivities({
+					activities : activities,
+					context :options.context,
+					styleClass : options.styleClass,
+					onclick : function(activity) { 													
+						//workitemController.pull();
+						options.onclick();
+						
+						// process workitem
+						imixsWorkflow.processWorkitem({
+							workitem : options.workitem,
+							activity : activity,
+							success : function(aworkitem) {
+								options.workitem.item = aworkitem.item;
+								options.onsuccess();
+							},
+							error : function() {
+								options.onerror();
+							}
+						});
+					}
+				});
+
+				$(options.context).imixsLayout();
+
+			},
+			error : function(activityList) {
+				console.warn("layoutActivities failed!");
+			}
+		}); 
+	},
+	
+	
+	
+	
 	/**
 	 * The method appends for each activity entity an action button. The method
 	 * did not add activity buttons with the activityEntity property
@@ -90,7 +145,7 @@ IMIXS.org.imixs.ui = (function() {
 			var activity = new imixs.ItemCollection(entity);
 			var testPublicResult = activity.getItem("keypublicresult");
 			if ("0" != testPublicResult) {
-				renderActionButton({
+				_renderActionButton({
 					activity : activity,
 					context : options.context,
 					insert : false,
@@ -110,7 +165,7 @@ IMIXS.org.imixs.ui = (function() {
 	 * 
 	 * context, activity, insert, styleClass, onclick
 	 */
-	renderActionButton = function(options) {
+	_renderActionButton = function(options) {
 		var actionName = options.activity.getItem('txtname');
 		var actionID = options.activity.getItem('numactivityid');
 		var tooltipText = options.activity.getItem('rtfdescription');
@@ -144,7 +199,8 @@ IMIXS.org.imixs.ui = (function() {
 	return {
 		dateFormat : dateFormat,
 		convertDateTimeInput : convertDateTimeInput,
-		renderActivities : renderActivities
+		renderActivities : renderActivities,
+		layoutActivities : layoutActivities
 	};
 
 }());
