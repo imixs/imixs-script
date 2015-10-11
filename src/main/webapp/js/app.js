@@ -47,12 +47,12 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 	Workitem = function(itemarray) {
 		imixs.ItemCollection.call(this, itemarray);
 		this.id = '';
-
+ 
 		/* return summary or txtname */
 		this.getSummary = function() {
 			var val = this.getItem("txtworkflowsummary");
 			if (!val)
-				val = this.getItem("subject");
+				val = this.getItem("txtsubject");
 			if (!val)
 				val = " - no title - ";
 			return val;
@@ -82,7 +82,6 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 		afterPush : function(controller, context) {
 			// jquery-ui
 			$(context).imixsLayout();
-								
 			
 			imixsUI.layoutActivities({
 				context : "#workitem_activities",
@@ -189,7 +188,7 @@ IMIXS.org.imixs.workflow.sample.app = (function() {
 			sortorder : 2,
 			start : worklistController.model.start,
 			count : worklistController.model.count,
-			items : [ '$uniqueid', 'txtworkflowsummary', '$creator', 'subject',
+			items : [ '$uniqueid', 'txtworkflowsummary', '$creator', 'txtsubject',
 					'$modified', 'txtworkflowstatus', 'namcurrenteditor' ],
 			success : function(entities) {
 				worklistController.model.view = entities;
