@@ -43,6 +43,6 @@ Please note that you also need to download jQuery from the [jQuery download page
 
 <a id="sample_application"></a>
  
-###The Sample application
+##The Sample application
 The Imixs-Script sample appliation provides an instance of the Imixs-Workflow engine and can be used as a template for custom project. See the [Installation Guide] how to install the sample application on WildFly or GlassFish application servers.
 
