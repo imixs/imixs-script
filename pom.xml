@@ -9,8 +9,6 @@
 	<description>Sample Applictaion</description>
 
 
-
-
 	<url>http://java.net/projects/imixs-workflow</url>
 	<organization>
 		<name>Imixs Software Solutions GmbH</name>
@@ -111,14 +109,6 @@
 
 
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -137,7 +127,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>3.2</version>
+				<version>3.4</version>
 				<configuration>
 					<locales>en</locales>
 					<reportPlugins>
@@ -186,11 +176,6 @@
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- <dependency> <groupId>javax.faces</groupId> <artifactId>jsf-api</artifactId> 
-			<version>2.0</version> <scope>provided</scope> </dependency> -->
-		<!-- Imixs Workflow -->
-
 		<dependency>
 			<groupId>org.imixs.workflow</groupId>
 			<artifactId>imixs-workflow-engine</artifactId>
@@ -202,7 +187,5 @@
 			<artifactId>imixs-workflow-jax-rs</artifactId>
 			<version>${org.imixs.workflow.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.imixs.workflow</groupId> <artifactId>imixs-workflow-faces</artifactId> 
-			<version>${org.imixs.workflow.version}</version> </dependency> -->
 	</dependencies>
 </project>
