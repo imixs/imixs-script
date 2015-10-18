@@ -1,14 +1,17 @@
-#imixs-script
+#Imixs-Script
 
-Imixs-Script is a JavaScript library to build powerfull web based workflow applications.
+Imixs-Script is a JavaScript library to build powerful web based workflow applications.
 Imixs-Script is based on JQuery and can be used together with common SPA-Frameworks like [Angular](https://www.angularjs.org/), [BenJS](http://www.benjs.org), [EmberJS](http://emberjs.com/) or your own framework. 
 Imixs-Script handles all the communication with the Imixs-Workflow engine via the Imixs Rest API which makes it easy to build a flexible ans scalable business application. 
 
+###Learn more about Imixs-Script on the [project home](http://www.imixs.org/script/)
+
+
 ##Sample Application
-You can checkout the sample application which gives an overview about the functionality of Imixs-Script and can be used as a template for own applications.
+You can checkout the latest release containing sample application which gives an overview about the functionality of Imixs-Script and can be used as a template for own applications.
 
 ##Deployment
-To start with Imixs-Script you need to deploy an instance of the imixs-workflow engine. This can be done by deploying the sample application or any othe Imixs-Workflow project. 
+To start with Imixs-Script you need to deploy an instance of the imixs-workflow engine. This can be done by deploying the sample application or any other Imixs-Workflow project. 
 
 #Join this Project
 If you have any questions our found a problem post it on [GitHub](https://github.com/imixs/imixs-script/issues). Find more about the Imixs-Workflow on the [project home](http://www.imixs.org)
