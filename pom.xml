@@ -6,7 +6,7 @@
 	<version>2.1.0</version>
 	<packaging>war</packaging>
 	<name>Imixs-Script</name>
-	<description>Sample Applictaion</description>
+	<description>Sample Application</description>
 
 
 	<url>http://java.net/projects/imixs-workflow</url>
@@ -76,10 +76,9 @@
 	</licenses>
 
 	
-	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<org.imixs.workflow.version>3.4.3</org.imixs.workflow.version>
+		<org.imixs.workflow.version>3.5.0-SNAPSHOT</org.imixs.workflow.version>
 		<custom.webResources>src/main/webapp</custom.webResources>
 	</properties>
 

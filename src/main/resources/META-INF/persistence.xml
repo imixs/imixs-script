@@ -7,7 +7,7 @@
 	-->
 
 	<!-- eclipselink -->
-	<persistence-unit name="org.imixs.workflow.jee.jpa" transaction-type="JTA">	
+	<persistence-unit name="org.imixs.workflow.jee.jpa" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>	
 		<jta-data-source>jdbc/workflow-db</jta-data-source>
 		<jar-file>lib/imixs-workflow-engine-${org.imixs.workflow.version}.jar</jar-file>
@@ -17,6 +17,11 @@
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.deploy-on-startup" value="true" />
 			<property name="eclipselink.logging.level" value="INFO" />	
+		
+			<!-- disable 2nd level cache 
+			<property name="eclipselink.cache.shared.default" value="false" />
+			<property name="eclipselink.query-results-cache" value="false"/>
+			-->
 		</properties>				
 	</persistence-unit>
 	
