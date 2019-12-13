@@ -1,19 +1,19 @@
 # Imixs-Script
 
-Imixs-Script is a JavaScript library to used in combination with the Imixs-Workflow Rest API. 
+Imixs-Script is a JavaScript library to be used in combination with the Imixs-Workflow Rest API. 
 The library is based on JQuery and can be used together with common SPA-Frameworks like [Vue.js](https://vuejs.org/), [Angular](https://www.angularjs.org/), [EmberJS](http://emberjs.com/) or your own framework. 
 
-Imixs-Script proivdes an simple way to exchange data objects with the Imixs-Workflow Rest API.
-The data can be loaded into the class 'ImixsDocument' which provides an convenience way to access the items within a Imixs Workitem. 
+Imixs-Script provides an easy way to exchange data objects with the Imixs-Workflow Rest API.
+The data can be loaded into the new JavaScript class 'ImixsDocument' which provides an convenience way to access the items within a Imixs Document or Workitem. 
 
-Imixs-Script brings its own namespace so there are no name conflicts with other classes. You can easily add the libray into your application:
+Imixs-Script brings its own namespace so there are no name conflicts with other classes. You can easily add the library into your application:
 
 	var imixs = IMIXS.org.imixs.core, 
 		 imixsXML = IMIXS.org.imixs.xml;
 		 imixsWorkflow = IMIXS.org.imixs.workflow;
  
 
-See the following example loading a document form the Imixs-Worklfow Rest API:
+See the following example loading a document form the Imixs-Worklfow Rest API with the jquey ajax method:
 
 	$.ajax({		            		
 	    url: 'http://localhost:8080/api/documents/'+myUUID,
@@ -31,7 +31,6 @@ See the following example loading a document form the Imixs-Worklfow Rest API:
 The result object 'workitem' can be used to access all attributes: 
 
 	console.log(workitem.getItem('$workflowstatus');
-
 
 
 You can also build a ImixsDocument from your application data
