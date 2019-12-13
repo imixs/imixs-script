@@ -1,7 +1,7 @@
 # Imixs-Script
 
 Imixs-Script is a JavaScript library to used in combination with the Imixs-Workflow Rest API. 
-The library is based on JQuery and can be used together with common SPA-Frameworks like [Vue.js](hhttps://vuejs.org/), [Angular](https://www.angularjs.org/), [EmberJS](http://emberjs.com/) or your own framework. 
+The library is based on JQuery and can be used together with common SPA-Frameworks like [Vue.js](https://vuejs.org/), [Angular](https://www.angularjs.org/), [EmberJS](http://emberjs.com/) or your own framework. 
 
 Imixs-Script proivdes an simple way to exchange data objects with the Imixs-Workflow Rest API.
 The data can be loaded into the class 'ImixsDocument' which provides an convenience way to access the items within a Imixs Workitem. 
