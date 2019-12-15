@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.imixs.script</groupId>
 	<artifactId>imixs-script</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<packaging>war</packaging>
 	<name>Imixs-Script</name>
 	<description>Sample Application</description>
