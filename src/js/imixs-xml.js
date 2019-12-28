@@ -25,7 +25,7 @@
  * representation of an ItemCollection similar to the
  * org.imixs.workflow.ItemCollection class
  * 
- * Version 3.0.0
+ * Version 3.0.1
  */
 
 IMIXS.namespace("org.imixs.xml");

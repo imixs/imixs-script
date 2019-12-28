@@ -24,7 +24,7 @@
  * model information
  * 
  * 
- * Version 3.0.0
+ * Version 3.0.1
  */
 
 IMIXS.namespace("org.imixs.workflow");
