@@ -176,6 +176,9 @@ IMIXS.org.imixs.xml = (function() {
 								}								
 							}
 						}
+						
+						
+						
 						// parse values....
 						for (var i = 0; i < xml.childNodes.length; i++) {
 							var item = xml.childNodes.item(i);
@@ -186,6 +189,17 @@ IMIXS.org.imixs.xml = (function() {
 								}
 
 								var valobj = {};
+								
+								// test for embedded xmlItemArray 
+								if (item.attributes.item(0)) {
+									var embeddedItem=item.attributes.item(0);
+									if (embeddedItem.nodeValue=='xmlItemArray') {
+										obj.values.push(xml2json(item));
+										continue;
+									}
+								}
+							
+								// standard value structure..
 								valobj['text'] = item.textContent;
 								if (item.attributes.length > 0) {
 									for (var j = 0; j < item.attributes.length; j++) {
